@@ -50,18 +50,19 @@ List of some examples of modules to monitor:
 Each module has a name, and each module should begin with the keyword "module"
 
 	var module_<module name> = [
+		here we have the expected output that the framework monitors when a test case is executed.
+	];
 	
-Each module will be declared in the module.json, where you specify the footprint file to monitor and you can also specify exception rules written with regular expression.
+Each module needs to be declared in the module.json, where you specify the footprint file to monitor and and where you also you can also specify some exception rules, that when validated the expected output is ignored. 
 
-In the other section we have the actual test case we are executing. In this example we create a service (customer service), and then create a customer with this service. The service that we are testing generates a footprint, this footprint is persisted in a specific file, and the test cases monitors that file for changes, and compares it with the expected value each time the test case is executed.
+In the other section of the test case we have the actual test case that we are executing. In this example we create a service (customer service), and then create a customer with this service. The service that we are testing generates a footprint, this footprint is persisted in a specific file, and the test cases monitors that file for changes, and compares it with the expected value each time the test case is executed (module_customer_service).
 
 ## Terminal
 The terminal program is a tool that one can easy run test cases, modify them and insert new expected output. To run the terminal execute terminal.bat
 
 ![Terminal](./screens/Screenshot_terminal.png)
 
-
-Some commands in the terminal:
+Some examples of commands that can be used in the terminal:
 
 	run 2
 	//runs the test case 2
@@ -72,7 +73,9 @@ Some commands in the terminal:
 	np 2
 	//opens a test cases with notepad++ for edit
 
-The different commands can also be access using the batch file e.bat. for instance to run test case 3, just type in a console:
+The Insert command is the swiss army knife of the framework, in combined with the diff/diffw one can easily validate and impact a test cases with the desired output.
+
+The different commands available in the framework can also be access using the batch file e.bat. for instance to run test case 3, just type in a console:
 
 	c:\e.bat run 3
 	
@@ -103,6 +106,7 @@ Complete command list:
 	touch
 
 ## Test case template
+
 The format and syntax of each test cases (part from the expected module list), should be defined by the development team. Once the development teams writes the different helpers methods and specify what should be tested or not, the QA team can copy the different test cases and generate more.
 
 For that the framework provides 3 type of builders/runtime objects. The type of objects have different scopes, and the scopes are as follows:
@@ -112,13 +116,13 @@ For that the framework provides 3 type of builders/runtime objects. The type of 
 
 This means that each builder/runtime object will be created taking account the scope. For instance if you run a test case, the objects that are TEST CASE SCOPE will be created each time a test cases is executed. While the ENGINE SCOPE will only be created once (when the terminal is launched). And the last SUIT SCOPE is created at the beginning of the executions. (if you run 5 test cases the SUIT SCOPE will be created once and the TEST CASE SCOPE will be created 5 times).
 
-In addition every builder/runtime object has a name and a destroy method. The name is used to reference it in the test case, and the destroy method is to destroy resources if necessary (close a file for example).
+In addition every builder/runtime object has a name and a destroy method. The name is used to reference it in the test case, and the destroy method is used to destroy resources if necessary (close a file for example).
 
 In the above test case example we have on builder "b".
 
 		var service = b.createCustomerService();
 
-And this builder "b" is "TEST CASE SCOPE" object, which means that it is created each time a test case is executed. Also the purpose of this object is to act as an builder, to facilitates the work of the QA team when writing test cases. In this example instead of creating a JSON object concatenating string we can easily use the builder pattern:
+This builder "b" is "TEST CASE SCOPE" object, which means that it is created each time a test case is executed. And the purpose of this object is to act as an builder, to facilitates the work of the creator of test case. In this example instead of creating a JSON object concatenating strings we can easily use the builder pattern:
 
 	b.withCustomer().firstName("John").lastName("Doe").age(33).regular(true).build() 
 
@@ -161,7 +165,7 @@ The framework configuration is written in yaml and located in the file eris.yaml
 
 ### Example 1
 
-Because the framework rely on the footprint generated it is important to interface your software at certain points, and in some cases one need to write simulators to simulate the behavior of an external application. Where to interface can vary substantial. Lets take a PostreSQL, as an example. Lets say we have a service that uses SQL to insert into a PostgreSQL data base. We could just launch locally a data base service and after executed our service we could ask the database what changed and we could output this footprint to our test cases. But because this means every one who uses the test suit would need to have the PostgreSQL running before running a test case, and we would need to clean up every time we launch the test cases. And this external dependency is not very helpful. One very simple solution would be to change the database with a more simile memory database (for instance HSQLDB). In this way we give robustness to our test suit, but on the other hand we do not have the exact same production environment. This design desition have to be taking into account when creating the testing environment. My suggestions is always prioritize robustness and maintainability over "correctness"
+Because the framework rely on the footprint generated it is important to interface your software at certain points, and in some cases one need to write simulators to simulate the behavior of an external application. Where to interface can vary substantial. Lets take a PostreSQL, as an example. Lets say we have a service that uses SQL to insert into a PostgreSQL data base. We could just launch locally a data base service and after we execute our service we could ask the database what changed and we could output this footprint to our test cases. But because this means every one who uses the test suit would need to have the PostgreSQL running before running a test case. This external dependency is not very helpful, one very simple solution would be to change the PostgresSQL service with something very simile, a memory sql database (for instance HSQLDB). In this way we give robustness to our test suit, but on the other hand we do not have the exact same production environment. This design decision have to be taking into account when creating the testing environment. My suggestions is always prioritize robustness and maintainability over "correctness". But it is up for the development team to setup and code the testing environment.
 
 In the examples provided there is and test case with HSQLDB, the test cases is as follows:
 
@@ -176,7 +180,7 @@ In the examples provided there is and test case with HSQLDB, the test cases is a
 		service.insert(1, "test");	
 	}
 
-In this example we have a service that generates a record in a SQL database, and we monitor every time a record is inserted to the database. If one need to insert records to the database before a test case is executed we would solve it in the builders, or we could just prepare the database, in the test case just before creating the service. The generation of the module footprint is done in the TEST CASE SCOPE builder "s".
+In this example we have a service that generates a record in a SQL database, and we monitor every time a record is inserted to the database. The generation of the module footprint is done in the builder "s", this builder has TEST CASE SCOPE, and looks something like this:
 
 	public class DatabaseBuilder implements IBuilder {
 		...
@@ -190,6 +194,9 @@ In this example we have a service that generates a record in a SQL database, and
 		}	
 	}
 
+In case one need to insert records(or prepare the database) before a test case is executed we could solve it in the builders, or simple do it in the test case just before creating the service
+
+
 ### Example 2
 	
 Another interesting example would be, lets say we need to authorize a credit card with a third party service. Because the third party api probably might not have an public testing end point, we might be forced to interface in some point in our code and write our simulator that simulates the response that the third party service should respond.  
@@ -199,7 +206,7 @@ Example, one would need to write an interface and two implementations:
 - Client.java
 - Simulator.java
 
-The test cases that one would write will only cover (test) the simulator.java, thats why it is important that the client.java code should be as simple as possible and not contain business logic, only communication code. And we would only monitor with the different test cases the data that is sent to the simulators, a test case could be something like this:
+The test cases that one would write would only cover the Simulator.java code, that's why it is important that the Client.java code should be as simple as possible and not contain business logic, only communication code. And the test cases would only monitor the data that is sent to the simulators, a test cases could be:
 
 	var Simulator = Java.type('third_party_authorization.Simulator');
 	
@@ -220,13 +227,12 @@ The test cases that one would write will only cover (test) the simulator.java, t
 	function test() {
 		Simulator.put("authorize", "MESSAGE_APPROVED");	
 		var service = s.createService();
-		service.someBusinessRules(10000);	
-		
+		service.someBusinessRules(10000);			
 	}
 
-In this test case we are monitoring the output of what our service is generated (with the module module_my_service) when we invoke someBusinessRules, and secondly we are monitoring each interaction with the simulator and the data that is sent to it which is in this case XML content(module_third_party_authorization).
+In this test case we are monitoring the output off what our service is generated (with the module module_my_service) when we invoke someBusinessRules, and secondly we are monitoring each interaction with the simulator and the data that is sent to it, which is in this case XML content(module_third_party_authorization).
 
-The interface could be:
+The interface of the client could be:
 
 	public interface IClient {
 		String authorize(String xml);
@@ -268,7 +274,7 @@ It is important that before you add the expected output into the test case, that
 	  }	
 	]
 
-You have to specify the name and the file that should be monitored. The pattern list is a list of regular expression so that you can escape some content that you are not interested to monitor or just cannot. For instance a date.
+You have to specify the name and the file that should be monitored. The pattern list is a list of regular expression that enables you to escape some content that you are not interested to monitor or just cannot monitor, for instance a date.
 
 ## Jenkins integrations
 
