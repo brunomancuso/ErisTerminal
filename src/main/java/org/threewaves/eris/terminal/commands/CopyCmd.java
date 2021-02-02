@@ -15,7 +15,7 @@ import org.threewaves.eris.engine.test_case.TestCase;
 
 class CopyCmd implements ICommand {
 	private final Engine eris;
-	
+
 	public CopyCmd(Engine eris) {
 		this.eris = eris;
 	}
@@ -44,7 +44,7 @@ class CopyCmd implements ICommand {
 			console.errorln(usage());
 			return;
 		}
-		Path path = testCases.get(0).getPath();		
+		Path path = testCases.get(0).getPath();
 		if (path == null || !Files.exists(path)) {
 			console.errorln("Cannot find tets case: " + path);
 			return;
@@ -54,7 +54,8 @@ class CopyCmd implements ICommand {
 			console.errorln("Cannot create test case");
 			return;
 		}
-		String newTc = JOptionPane.showInputDialog(null, "Test case filename?", testCases.get(0).getFileName().toString());
+		String newTc = JOptionPane.showInputDialog(null, "Test case filename?",
+				testCases.get(0).getFileName().toString());
 		if (newTc != null) {
 			try {
 				Files.copy(path, Paths.get(parent.toString(), newTc));
@@ -63,6 +64,5 @@ class CopyCmd implements ICommand {
 			}
 		}
 	}
-
 
 }

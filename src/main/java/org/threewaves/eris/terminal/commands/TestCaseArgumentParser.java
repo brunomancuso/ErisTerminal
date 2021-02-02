@@ -43,7 +43,7 @@ class TestCaseArgumentParser {
 			Optional<Module> m = avaibleModules.find(o);
 			if (m.isPresent()) {
 				modules.add(m.get());
-			}			
+			}
 		});
 		if (modules.size() == 0) {
 			modules.addAll(avaibleModules.getList());
@@ -71,16 +71,17 @@ class TestCaseArgumentParser {
 			return Collections.singletonList(TestCase.of(p));
 		} else if (fileName.toString().contains(TestCase.PREFIX_NAME_SHORT)) {
 			return Collections.singletonList(TestCase.of(p));
-		} else if (fileName.toString().contains("-")
-				&& !fileName.toString().contains(TestCase.PREFIX_NAME)
+		} else if (fileName.toString().contains("-") && !fileName.toString().contains(TestCase.PREFIX_NAME)
 				&& !fileName.toString().contains(TestCase.PREFIX_NAME_SHORT)) {
 			int index = fileName.toString().indexOf('-');
 			String s = fileName.toString().substring(0, index);
 			String e = fileName.toString().substring(index + 1);
 			if (Format.parseInt(s) > 0 && Format.parseInt(e) > 0) {
-				return IntStream.rangeClosed(Format.parseInt(s), Format.parseInt(e)).boxed().map(n -> findByNumber(testCases, n)).filter(tc -> tc.isPresent()).map(o -> o.get()).collect(Collectors.toList());
+				return IntStream.rangeClosed(Format.parseInt(s), Format.parseInt(e)).boxed()
+						.map(n -> findByNumber(testCases, n)).filter(tc -> tc.isPresent()).map(o -> o.get())
+						.collect(Collectors.toList());
 			} else {
-				//System.out.println("Test case(s) not found: " + f);
+				// System.out.println("Test case(s) not found: " + f);
 			}
 		} else if (parent != null && Format.parseInt(fileName.toString(), 0) > 0) {
 			int testCase = Format.parseInt(fileName.toString(), 0);

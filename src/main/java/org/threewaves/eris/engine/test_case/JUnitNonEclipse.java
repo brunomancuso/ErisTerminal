@@ -8,11 +8,10 @@ import java.util.function.Consumer;
 import org.threewaves.eris.engine.Engine;
 import org.threewaves.eris.engine.IBuilder;
 
-
 public class JUnitNonEclipse implements IJUnit {
 	private final Engine engine;
 	private final TestCaseRunner runner;
-	
+
 	public JUnitNonEclipse(Engine engine, TestCaseRunner runner) {
 		super();
 		this.engine = engine;
@@ -21,12 +20,12 @@ public class JUnitNonEclipse implements IJUnit {
 
 	@Override
 	public void afterAll(Consumer<String> assertModule) throws IOException {
-		
+
 	}
 
 	@Override
 	public void beforeAll() {
-		
+
 	}
 
 	@Override
@@ -36,7 +35,7 @@ public class JUnitNonEclipse implements IJUnit {
 		bs.addAll(engine.getEngineBuilders());
 		bs.addAll(runner.getSuitBuilders());
 		if (runner.getTestCaseBuilders() != null) {
-			bs.addAll(runner.getTestCaseBuilders());	
+			bs.addAll(runner.getTestCaseBuilders());
 		}
 		for (IBuilder b : bs) {
 			if (b.name().equals(name)) {

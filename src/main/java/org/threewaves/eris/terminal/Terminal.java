@@ -26,11 +26,9 @@ import org.threewaves.eris.terminal.GenericAppender.IAppender;
 import org.threewaves.eris.terminal.GenericAppender.Type;
 import org.threewaves.eris.terminal.commands.CommandFactory;
 
-
-
 public class Terminal {
 	private static final String CONSOLE_NAME = "Eris Terminal";
-	
+
 	private final ComponentOutputStream out;
 	private final ComponentOutputStream error;
 	private final ComponentOutputStream notification;
@@ -38,15 +36,15 @@ public class Terminal {
 
 	private JConsole console;
 
-	public Terminal(String[] args) throws ConfigException, UnsupportedEncodingException {		
+	public Terminal(String[] args) throws ConfigException, UnsupportedEncodingException {
 		Config config = Config.create();
 		TerminalHistory history = TerminalHistory.load();
-		Engine engine = new Engine(config.createFactory(), config.createTestSuit());		
+		Engine engine = new Engine(config.createFactory(), config.createTestSuit());
 		frame = new JFrame(CONSOLE_NAME + " - " + workingDirectory() + (isAdmin() ? " - Administrator" : ""));
 		Map<String, ICommand> commands = CommandFactory.create(config, engine, () -> {
-	    	history.resize(frame.getWidth(), frame.getHeight());
-	    	history.moved(frame.getX(), frame.getY());
-	    	history.save();
+			history.resize(frame.getWidth(), frame.getHeight());
+			history.moved(frame.getX(), frame.getY());
+			history.save();
 			frame.setVisible(false);
 			frame.dispose();
 		}, () -> {
@@ -58,17 +56,17 @@ public class Terminal {
 		frame.setIconImage(icon.getImage());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		console = new JConsole(config, history, commands.values(), engine.getModules());
-        GenericAppender appender = new GenericAppender(new IAppender() {
+		GenericAppender appender = new GenericAppender(new IAppender() {
 			@Override
 			public void append(Type type, String val) {
 				if (type == Type.NORMAL) {
-					console.append(JConsole.NORMAL_COLOR, val);					
+					console.append(JConsole.NORMAL_COLOR, val);
 				}
 				if (type == Type.ERROR) {
-					console.append(JConsole.ERROR_COLOR, val);					
+					console.append(JConsole.ERROR_COLOR, val);
 				}
 				if (type == Type.NOTIFICATION) {
-					console.append(JConsole.NOTIFICATION_COLOR, val);					
+					console.append(JConsole.NOTIFICATION_COLOR, val);
 				}
 
 			}
@@ -82,9 +80,9 @@ public class Terminal {
 			public int size() {
 				return console.size();
 			}
-        	
-        }, 1000);
-        
+
+		}, 1000);
+
 		out = new ComponentOutputStream(appender, Type.NORMAL);
 		error = new ComponentOutputStream(appender, Type.ERROR);
 		notification = new ComponentOutputStream(appender, Type.NOTIFICATION);
@@ -95,7 +93,7 @@ public class Terminal {
 
 		CommandConsole defaultConsole = new CommandConsole(outStream, errorStream, notificationStream, (enable) -> {
 			enableStreams(enable);
-		});		
+		});
 		console.addExecutionListener((c, o) -> {
 			defaultConsole.stdout(c + " " + o);
 			ICommand cmd = commands.get(c);
@@ -106,40 +104,40 @@ public class Terminal {
 			}
 		});
 		JScrollPane scroll = new JScrollPane( //
-		        console.getComponent(), //
-		        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, //
-		        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED //
-		);		
+				console.getComponent(), //
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, //
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED //
+		);
 		frame.setLayout(new BorderLayout());
 		frame.add(scroll);
 		if (history.getWidth() > 0 && history.getHeight() > 0) {
-			frame.setSize(history.getWidth(), history.getHeight()); 
+			frame.setSize(history.getWidth(), history.getHeight());
 		} else {
-			frame.setSize(1440, 600); 
+			frame.setSize(1440, 600);
 		}
 		if (history.getPosX() > 0 && history.getPosY() > 0) {
-			frame.setLocation(history.getPosX(), history.getPosY());			
+			frame.setLocation(history.getPosX(), history.getPosY());
 		} else {
 			frame.setLocationRelativeTo(null);
 		}
 		SwingUtilities.invokeLater(() -> {
 			Thread.currentThread().setName("terminal");
-		});		
+		});
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
-		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-		    	history.resize(frame.getWidth(), frame.getHeight());
-		    	history.moved(frame.getX(), frame.getY());
-		    	history.save();
-		    	closeStreams();
-		    }
-		});				
-    	engine.initialize();
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				history.resize(frame.getWidth(), frame.getHeight());
+				history.moved(frame.getX(), frame.getY());
+				history.save();
+				closeStreams();
+			}
+		});
+		engine.initialize();
 	}
-	
+
 	public void show() {
 		frame.setVisible(true);
-		//initialize engine
+		// initialize engine
 		System.out.println(" - " + Quote.random());
 		console.newPrompt();
 
@@ -148,9 +146,9 @@ public class Terminal {
 	private void enableStreams(Boolean enable) {
 		out.enable(enable);
 		error.enable(enable);
-		notification.enable(enable);		
+		notification.enable(enable);
 	}
-	
+
 	private void closeStreams() {
 		out.close();
 		error.close();

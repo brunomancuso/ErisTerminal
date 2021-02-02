@@ -6,7 +6,7 @@ import org.threewaves.eris.engine.ICommand;
 import org.threewaves.eris.engine.ICommandConsole;
 
 class ExitCmd implements ICommand {
-	
+
 	private final Runnable exit;
 
 	public ExitCmd(Runnable exit) {

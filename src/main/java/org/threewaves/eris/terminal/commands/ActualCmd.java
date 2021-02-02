@@ -12,7 +12,6 @@ import org.threewaves.eris.engine.footprint.Module;
 import org.threewaves.eris.engine.test_case.TestCase;
 import org.threewaves.eris.engine.test_case.TestRun;
 
-
 class ActualCmd implements ICommand {
 	private final Engine eris;
 
@@ -40,25 +39,26 @@ class ActualCmd implements ICommand {
 		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(), eris.getModules());
 		parser.process(arguments);
 		List<TestCase> testCases = parser.testCases();
-		List<Module> modules = parser.modules();		
+		List<Module> modules = parser.modules();
 		testCases.forEach(tc -> {
 			try {
 				console.notification(tc.getName() + ICommandConsole.NEWLINE);
-				for (Module module : modules) {			
+				for (Module module : modules) {
 					console.notification(module.getName() + ICommandConsole.NEWLINE);
 					TestRun testRun = new TestRun();
-					Path p = testRun.toRawModule(tc.getName(), module.getName());					
+					Path p = testRun.toRawModule(tc.getName(), module.getName());
 					if (!Files.exists(p)) {
 						console.errorln("Module output does not exists: " + module.getName());
 					} else {
-						Files.readAllLines(p).forEach(text -> console.notification(ICommandConsole.TAB + text + ICommandConsole.NEWLINE));
+						Files.readAllLines(p).forEach(
+								text -> console.notification(ICommandConsole.TAB + text + ICommandConsole.NEWLINE));
 					}
 				}
 			} catch (RuntimeException | IOException e) {
 				console.errorln(e.getMessage());
 			}
-		});			
-	
+		});
+
 	}
 
 }

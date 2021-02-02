@@ -5,23 +5,24 @@ import java.util.function.Consumer;
 
 public class CommandConsole implements ICommandConsole {
 	private final PrintStream stdout;
-	private final PrintStream stderr;	
+	private final PrintStream stderr;
 	private final PrintStream notificationStream;
 	private Consumer<Boolean> onChanged;
-	
-	public CommandConsole(PrintStream newOut, PrintStream newErr, PrintStream notificationStream, Consumer<Boolean> onChanged) {
+
+	public CommandConsole(PrintStream newOut, PrintStream newErr, PrintStream notificationStream,
+			Consumer<Boolean> onChanged) {
 		stdout = System.out;
-		stderr = System.err;	
+		stderr = System.err;
 		this.onChanged = onChanged;
 		System.setOut(newOut);
 		System.setErr(newErr);
 		this.notificationStream = notificationStream;
 	}
-	
+
 	public CommandConsole install() {
 		return this;
 	}
-	
+
 	@Override
 	public void print(String str) {
 		System.out.print(str);
@@ -58,18 +59,17 @@ public class CommandConsole implements ICommandConsole {
 			onChanged.accept(enable);
 		}
 	}
-	
-	
-	public void stdout(Object ... args) {
+
+	public void stdout(Object... args) {
 		for (Object object : args) {
-			stdout.print(object);			
+			stdout.print(object);
 		}
 		stdout.println();
 	}
 
-	public void stderr(Object ... args) {
+	public void stderr(Object... args) {
 		for (Object object : args) {
-			stderr.print(object);			
+			stderr.print(object);
 		}
 		stderr.println();
 	}

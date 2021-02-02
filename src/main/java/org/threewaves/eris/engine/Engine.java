@@ -13,12 +13,12 @@ public class Engine {
 	private final IErisFactory factory;
 	private final List<IBuilder> engineBuilders = new ArrayList<>();
 	private final TestSuit suit;
-	
+
 	public Engine(IErisFactory factory, TestSuit suit) {
 		this.suit = suit;
 		this.factory = factory;
 	}
-	
+
 	public void initialize() throws ConfigException {
 		List<IBuilder> list = factory.createBuilders(Scope.ENGINE);
 		if (list != null) {
@@ -27,7 +27,7 @@ public class Engine {
 		validateBuilders(engineBuilders);
 		modules.refresh();
 	}
-	
+
 	public List<IBuilder> createSuitBuilders() {
 		List<IBuilder> list = factory.createBuilders(Scope.TEST_SUIT);
 		if (list == null) {
@@ -41,14 +41,15 @@ public class Engine {
 		list.stream().forEach(b -> {
 			if (b.name().isEmpty()) {
 				throw new IllegalArgumentException("Builder name cannot be empty");
-			};
-		});		
+			}
+			;
+		});
 	}
 
 	public void sleep(long time) throws InterruptedException {
 		Thread.sleep(1000);
 	}
-	
+
 	public List<IBuilder> createTestCaseBuilders() {
 		List<IBuilder> list = factory.createBuilders(Scope.TEST_CASE);
 		if (list == null) {

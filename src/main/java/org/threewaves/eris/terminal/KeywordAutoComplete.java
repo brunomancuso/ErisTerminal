@@ -20,13 +20,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-
 class KeywordAutoComplete implements IAutoComplete {
 	private final List<String> terms = new ArrayList<>();
 
 	public KeywordAutoComplete() {
 	}
-	
+
 	public KeywordAutoComplete add(Collection<String> collection) {
 		terms.addAll(collection);
 		return this;

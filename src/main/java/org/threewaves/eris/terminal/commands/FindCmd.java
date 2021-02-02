@@ -40,7 +40,7 @@ class FindCmd implements ICommand {
 		}
 		try {
 			ShellExec shell = new ShellExec(false, true, true);
-			shell.execute(".\\bin\\grep.exe", ".", true, suit.directory() +  "/" + TestCase.PREFIX_NAME + "*.*",
+			shell.execute(".\\bin\\grep.exe", ".", true, suit.directory() + "/" + TestCase.PREFIX_NAME + "*.*",
 					"--text", "-e", arguments.get(0));
 			console.print(shell.getOutput());
 			if (!shell.getError().isEmpty()) {

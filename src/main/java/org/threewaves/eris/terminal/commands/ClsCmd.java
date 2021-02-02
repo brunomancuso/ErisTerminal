@@ -13,7 +13,7 @@ public class ClsCmd implements ICommand {
 	public ClsCmd(Runnable run) {
 		this.run = run;
 	}
-	
+
 	@Override
 	public String description() {
 		return "Clear console";

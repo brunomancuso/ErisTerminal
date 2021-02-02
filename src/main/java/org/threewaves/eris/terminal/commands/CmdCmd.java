@@ -7,9 +7,8 @@ import org.threewaves.eris.engine.ICommand;
 import org.threewaves.eris.engine.ICommandConsole;
 import org.threewaves.eris.util.ShellExec;
 
-
 class CmdCmd implements ICommand {
-	
+
 	public CmdCmd() {
 	}
 
@@ -39,7 +38,7 @@ class CmdCmd implements ICommand {
 			new ShellExec(true, true, true).execute("cmd", dir, false, "/c", "start", "cmd");
 		} catch (IOException e) {
 			console.errorln(e.toString());
-		}	
+		}
 	}
 
 }

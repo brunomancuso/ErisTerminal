@@ -8,7 +8,7 @@ import org.threewaves.eris.engine.ICommandConsole;
 import org.threewaves.eris.util.ShellExec;
 
 class RestartCmd implements ICommand {
-	
+
 	private final Runnable exit;
 
 	public RestartCmd(Runnable exit) {

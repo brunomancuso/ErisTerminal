@@ -131,22 +131,22 @@ public class TestRun {
 				}
 			}
 		} catch (IOException e) {
-			//log.error(e);
+			// log.error(e);
 		}
 		return false;
 	}
 
 	private List<String> listModules(TestCase testCase) throws IOException {
 		try (Stream<Path> s = Files.list(toTestRunPath(testCase.getName()))) {
-			return s
-					.filter(f -> f.toString().endsWith(".actual"))
+			return s.filter(f -> f.toString().endsWith(".actual"))
 					.map(f -> f.getFileName().toString().substring(0, f.getFileName().toString().lastIndexOf('.')))
 					.collect(Collectors.toList());
 		}
 	}
 
 	public boolean isFailed(TestCase testCase, String module) {
-		return !isEqualByContent(toActualModule(testCase.getName(), module), toExpectedModule(testCase.getName(), module));
+		return !isEqualByContent(toActualModule(testCase.getName(), module),
+				toExpectedModule(testCase.getName(), module));
 	}
 
 	public boolean isNull(TestCase testCase, String name) {

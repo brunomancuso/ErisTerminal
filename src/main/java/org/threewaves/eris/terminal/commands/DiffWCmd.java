@@ -12,11 +12,10 @@ import org.threewaves.eris.engine.test_case.TestCase;
 import org.threewaves.eris.engine.test_case.TestRun;
 import org.threewaves.eris.util.ShellExec;
 
-
 class DiffWCmd implements ICommand {
 	private final Engine eris;
 	private final Config config;
-	
+
 	public DiffWCmd(Config config, Engine eris) {
 		this.eris = eris;
 		this.config = config;
@@ -41,7 +40,7 @@ class DiffWCmd implements ICommand {
 			console.errorln("Can only diff 1 test cases at the time");
 			return;
 		}
-		List<Module> modules = parser.modules();		
+		List<Module> modules = parser.modules();
 		TestRun testRun = new TestRun();
 		for (TestCase testCase : testCases) {
 			for (Module m : modules) {

@@ -7,11 +7,11 @@ import java.nio.charset.Charset;
 import org.threewaves.eris.terminal.GenericAppender.Type;
 
 class ComponentOutputStream extends OutputStream {
-	private byte[] oneByte; 
-	private GenericAppender appender; 
+	private byte[] oneByte;
+	private GenericAppender appender;
 	private boolean enabled = true;
 	private Type defaultType;
-	
+
 	public ComponentOutputStream(GenericAppender appender, Type defaultType) {
 		this.oneByte = new byte[1];
 		this.appender = appender;
@@ -32,7 +32,7 @@ class ComponentOutputStream extends OutputStream {
 	}
 
 	public void write(int val) {
-		if (enabled) {	
+		if (enabled) {
 			oneByte[0] = (byte) val;
 			write(oneByte, 0, 1);
 		}
@@ -44,7 +44,7 @@ class ComponentOutputStream extends OutputStream {
 		}
 	}
 
-	public void write(byte[] ba, int str, int len) {		
+	public void write(byte[] ba, int str, int len) {
 		if (enabled && appender != null) {
 			appender.append(defaultType, bytesToString(ba, str, len));
 		}

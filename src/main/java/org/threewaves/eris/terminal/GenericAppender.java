@@ -17,15 +17,18 @@ class GenericAppender implements Runnable {
 
 	public interface IAppender {
 		void append(Type type, String val);
+
 		void remove(int start, int end);
-		int size();	
+
+		int size();
 	}
+
 	private final IAppender container;
 	private final int maxLines; // maximum lines allowed in text area
 	private final LinkedList<Integer> lengths; // length of lines within text area
 	private final List<Pair<Type, String>> values; // values waiting to be appended
 
-	private int curLength; 
+	private int curLength;
 	private boolean clear;
 	private boolean queue;
 
@@ -67,7 +70,7 @@ class GenericAppender implements Runnable {
 		if (clear) {
 			container.remove(0, container.size() - 1);
 		}
-		for (Pair<Type,String> val : values) {
+		for (Pair<Type, String> val : values) {
 			curLength += val.second.length();
 			if (val.second.endsWith(EOL1) || val.second.endsWith(EOL2)) {
 				if (lengths.size() >= maxLines) {
@@ -82,4 +85,4 @@ class GenericAppender implements Runnable {
 		clear = false;
 		queue = true;
 	}
-}	
+}

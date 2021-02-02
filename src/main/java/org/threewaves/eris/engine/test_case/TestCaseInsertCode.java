@@ -55,8 +55,7 @@ public class TestCaseInsertCode {
 			tabs1 = "";
 		}
 		boolean insert = true;
-		if (fileName != null && fileName.toString() != null
-				&& fileName.toString().lastIndexOf('.') > 0) {
+		if (fileName != null && fileName.toString() != null && fileName.toString().lastIndexOf('.') > 0) {
 			String tcName = fileName.toString().substring(0, fileName.toString().lastIndexOf('.'));
 			Path pathActual = testRun.toActualModule(tcName, name);
 			Path pathExpected = testRun.toExpectedModule(tcName, name);
@@ -64,7 +63,7 @@ public class TestCaseInsertCode {
 				insert = false;
 			}
 			List<String> content = Files.readAllLines(p);
-			boolean found = false;			
+			boolean found = false;
 			for (int i = 0; i < content.size(); i++) {
 				if (isModuleHeader(isJUnit, name, content.get(i))) {
 					if (!insert) {
@@ -82,7 +81,8 @@ public class TestCaseInsertCode {
 					}
 					if (j > 0) {
 						remove(content, i + 1, j - 1);
-						List<String> actual = Files.exists(pathActual) ? Files.readAllLines(pathActual) : new ArrayList<>();
+						List<String> actual = Files.exists(pathActual) ? Files.readAllLines(pathActual)
+								: new ArrayList<>();
 						for (int k = 0; k < actual.size(); k++) {
 							content.add(i + 1, tabs + "\"" + actual.get(actual.size() - k - 1) + "\",");
 						}
@@ -96,11 +96,13 @@ public class TestCaseInsertCode {
 				for (int i = 0; i < content.size(); i++) {
 					if (i > 0) {
 						if (isTestHeader(isJUnit, content.get(i))) {
-							List<String> actual = Files.exists(pathActual) ? Files.readAllLines(pathActual) : new ArrayList<>();
+							List<String> actual = Files.exists(pathActual) ? Files.readAllLines(pathActual)
+									: new ArrayList<>();
 							if (actual != null) {
 								if (isJUnit) {
 									content.add(i - 1, "");
-									content.add(i, tabs1 + "public final String[] module_" + name + " = new String[] {");
+									content.add(i,
+											tabs1 + "public final String[] module_" + name + " = new String[] {");
 								} else {
 									content.add(i - 1, "");
 									content.add(i, tabs1 + "var module_" + name + " = [");

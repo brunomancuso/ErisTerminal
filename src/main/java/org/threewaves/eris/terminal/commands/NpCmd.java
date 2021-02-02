@@ -12,9 +12,8 @@ import org.threewaves.eris.engine.test_case.TestCase;
 import org.threewaves.eris.engine.test_case.TestSuit;
 import org.threewaves.eris.util.ShellExec;
 
-
 class NpCmd implements ICommand {
-	
+
 	private final Config config;
 	private final TestSuit suit;
 
@@ -47,16 +46,17 @@ class NpCmd implements ICommand {
 	}
 
 	private void np(ICommandConsole console, String arg) {
-		
+
 		List<TestCase> list = TestCaseArgumentParser.parse(suit, arg);
 		if (list.size() == 0) {
 			np(console, Paths.get(arg));
 		} else {
 			list.forEach(tc -> {
-				np(console, tc.getPath());							
+				np(console, tc.getPath());
 			});
 		}
 	}
+
 	private void np(ICommandConsole console, Path p) {
 		try {
 			new ShellExec().execute(config.notepad, ".", false, p.toAbsolutePath().toString());

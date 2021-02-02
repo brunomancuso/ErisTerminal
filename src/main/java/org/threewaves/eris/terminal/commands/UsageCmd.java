@@ -6,7 +6,7 @@ import org.threewaves.eris.engine.ICommand;
 import org.threewaves.eris.engine.ICommandConsole;
 
 class UsageCmd implements ICommand {
-	
+
 	private final String usage;
 
 	public UsageCmd(String usage) {

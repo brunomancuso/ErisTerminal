@@ -118,7 +118,7 @@ This means that each builder/runtime object will be created taking account the s
 
 In addition every builder/runtime object has a name and a destroy method. The name is used to reference it in the test case, and the destroy method is used to destroy resources if necessary (close a file for example).
 
-In the above test case example we have on builder "b".
+In the above test case example we have a builder "b".
 
 		var service = b.createCustomerService();
 

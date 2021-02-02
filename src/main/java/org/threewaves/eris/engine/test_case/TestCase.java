@@ -9,7 +9,7 @@ public class TestCase {
 	public static final String PREFIX_NAME = "Test_";
 	public static final String PREFIX_NAME_SHORT = "tc_";
 	private final Path path;
-	
+
 	private TestCase(Path p) {
 		this.path = p;
 	}
@@ -33,7 +33,7 @@ public class TestCase {
 	public int getNumber() {
 		return number(path);
 	}
-	
+
 	public static int number(Path path) {
 		if (path != null) {
 			path = path.getFileName();
@@ -62,7 +62,7 @@ public class TestCase {
 	public Path getFileName() {
 		return path.getFileName();
 	}
-	
+
 	public String toString() {
 		return path.toString();
 	}

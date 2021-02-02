@@ -13,17 +13,16 @@ import org.threewaves.eris.engine.ConfigException;
 import org.threewaves.eris.engine.Engine;
 import org.threewaves.eris.engine.IBuilder;
 
-
 public class JUnitEclipse implements IJUnit {
 	private final TestCaseRunner runner;
 	private final Engine engine;
-	
+
 	public JUnitEclipse() {
-		try {			
+		try {
 			validateDirectory();
 			Config config = Config.create();
 			engine = new Engine(config.createFactory(), config.createTestSuit());
-			engine.initialize();			
+			engine.initialize();
 			runner = new TestCaseRunner(engine, config.scriptEngine);
 			runner.beforeRunner();
 		} catch (ConfigException | IOException e) {
@@ -61,7 +60,7 @@ public class JUnitEclipse implements IJUnit {
 		bs.addAll(engine.getEngineBuilders());
 		bs.addAll(runner.getSuitBuilders());
 		if (runner.getTestCaseBuilders() != null) {
-			bs.addAll(runner.getTestCaseBuilders());	
+			bs.addAll(runner.getTestCaseBuilders());
 		}
 		for (IBuilder b : bs) {
 			if (b.name().equals(name)) {
@@ -74,5 +73,5 @@ public class JUnitEclipse implements IJUnit {
 	@Override
 	public Engine getEngine() {
 		return engine;
-	}	
+	}
 }

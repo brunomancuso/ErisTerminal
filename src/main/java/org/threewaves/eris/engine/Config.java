@@ -19,7 +19,7 @@ public class Config {
 
 	public Config() {
 		notepad = "notepad2.exe";
-		diffw = "C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe";			
+		diffw = "C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe";
 		factory = DefaultErisFactory.class.getName();
 		testCaseDirectory = "../src/main/test-case";
 		scriptEngine = "ECMAScript";

@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 class TerminalHistory {
-	private static final Path FILE = Paths.get(".history");	
+	private static final Path FILE = Paths.get(".history");
 	private final List<String> prompts = new ArrayList<>();
 	private int index = 0;
 	private int posX;

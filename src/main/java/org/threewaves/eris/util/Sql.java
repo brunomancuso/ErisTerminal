@@ -36,20 +36,20 @@ public class Sql implements Closeable {
 		this(db);
 		this.validatingDbConnectionQuery = validatingDbConnectionQuery;
 	}
-	
+
 	public Sql(Connection db) {
 		this.debug = false;
 		this.db = db;
 		connected = db != null;
 	}
-	
-	public static Connection connectMandatory(String driver, String url
-			, String user, String password) throws SQLException {
+
+	public static Connection connectMandatory(String driver, String url, String user, String password)
+			throws SQLException {
 		return connectMandatory(driver, url, user, password, true);
 	}
-	
-	public static Connection connectMandatory(String driver, String url
-			, String user, String password, boolean debug) throws SQLException {
+
+	public static Connection connectMandatory(String driver, String url, String user, String password, boolean debug)
+			throws SQLException {
 		try {
 			return connectDB(driver, url, user, password, false, debug);
 		} catch (SQLException e) {
@@ -62,13 +62,15 @@ public class Sql implements Closeable {
 		return connect(driver, url, user, password, 0);
 	}
 
-	public static Connection connect(String driver, String url, String user, String password, int retryConnection ) {
+	public static Connection connect(String driver, String url, String user, String password, int retryConnection) {
 		return connect(driver, url, user, password, retryConnection, null);
 	}
 
-	public static Connection connect(String driver, String url, String user, String password, int retryConnection, String validatingDbConnectionQuery) {
+	public static Connection connect(String driver, String url, String user, String password, int retryConnection,
+			String validatingDbConnectionQuery) {
 		Connection conn = null;
-		//Usamos do ya que si retryConnection es false debe intentar una vez realizar la conexion
+		// Usamos do ya que si retryConnection es false debe intentar una vez realizar
+		// la conexion
 		int retryCount = 0;
 		do {
 			try {
@@ -82,15 +84,15 @@ public class Sql implements Closeable {
 		} while (retryConnection > retryCount);
 		return conn;
 	}
-	
-	private static Connection connectDB(String driver, String url, String user
-			, String password, boolean mandatory, boolean debug) throws SQLException {		
+
+	private static Connection connectDB(String driver, String url, String user, String password, boolean mandatory,
+			boolean debug) throws SQLException {
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
 			System.err.println("Driver not found:" + e);
 			return null;
-		}		
+		}
 		Connection tmp = null;
 		if (debug) {
 			System.out.println("Trying to connect to " + url);
@@ -101,7 +103,7 @@ public class Sql implements Closeable {
 		}
 		return tmp;
 	}
-	
+
 	public boolean isConnected() {
 		try {
 			return connected && !db.isClosed();
@@ -124,9 +126,10 @@ public class Sql implements Closeable {
 				if (rs.next()) {
 					result = rs.getString(1);
 					if (debug) {
-						System.out.println("The db connection has been validated. | " + validatingDbConnectionQuery + " result: " + result);
+						System.out.println("The db connection has been validated. | " + validatingDbConnectionQuery
+								+ " result: " + result);
 					}
-				}			
+				}
 				if (result == null) {
 					if (debug) {
 						System.err.println("Invalid db connection");
@@ -143,11 +146,11 @@ public class Sql implements Closeable {
 		}
 	}
 
-	public boolean update(String update)  {
+	public boolean update(String update) {
 		try (Statement st = db.createStatement()) {
 			if (debug) {
 				System.out.println("UPDATE::" + update);
-			}			
+			}
 			st.executeUpdate(update);
 			return true;
 		} catch (SQLException e) {
@@ -162,7 +165,7 @@ public class Sql implements Closeable {
 	public Long insert(String insert) {
 		return insert(insert, 0L);
 	}
-	
+
 	public Long insert(String insert, Long newId) {
 		try (Statement st = db.createStatement()) {
 			if (debug) {
@@ -187,13 +190,13 @@ public class Sql implements Closeable {
 		}
 		return newId;
 	}
-	
-	public List<Object[]> select(int size, String select)  {
+
+	public List<Object[]> select(int size, String select) {
 		return select(size, select, 0);
 	}
-	
-	public List<Object[]> select(int size, String select, int maxSize)  {
-		List<Object[]> tmp = new ArrayList < Object[] >();
+
+	public List<Object[]> select(int size, String select, int maxSize) {
+		List<Object[]> tmp = new ArrayList<Object[]>();
 		if (!isConnected()) {
 			return tmp;
 		}
@@ -205,16 +208,16 @@ public class Sql implements Closeable {
 				while (rs.next()) {
 					if (size > 0) {
 						Object[] row = new Object[size];
-						for (int i = 0; i < row.length; i++) {					
+						for (int i = 0; i < row.length; i++) {
 							row[i] = rs.getObject(i + 1);
 						}
 						tmp.add(row);
 					} else {
 						if (debug) {
 							System.err.println("SELECT::Row size is 0");
-						}					
+						}
 					}
-				}			
+				}
 				if (debug) {
 					System.out.println("SELECT::" + select + " == " + tmp.size());
 				}
@@ -242,7 +245,7 @@ public class Sql implements Closeable {
 	public PreparedStatement createPrepareStatement(String insert) throws SQLException {
 		return db.prepareStatement(insert);
 	}
-	
+
 	Connection getConnection() {
 		return db;
 	}
@@ -253,12 +256,12 @@ public class Sql implements Closeable {
 			db.setAutoCommit(false);
 		}
 	}
-	
+
 	public void commit() throws SQLException {
 		if (connected) {
 			db.commit();
 			db.setAutoCommit(autoCommit);
-		}		
+		}
 	}
 
 	public void rollback() {

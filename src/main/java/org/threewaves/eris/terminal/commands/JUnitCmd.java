@@ -20,7 +20,7 @@ public class JUnitCmd implements ICommand {
 	public JUnitCmd(Engine eris) {
 		this.eris = eris;
 	}
-	
+
 	@Override
 	public String description() {
 		return "Generate JUnit Test case";
@@ -60,8 +60,9 @@ public class JUnitCmd implements ICommand {
 					Files.deleteIfExists(newFile);
 					String template = new String(Files.readAllBytes(Paths.get("templates/junit.template")),
 							Charset.defaultCharset());
-					String newTestCase = template.replaceAll("__TEST_CASE__", testCase).replaceAll("__TEST_CASE_NUMBER__", number).replace("__TEST_CASE_EXTENSION__",
-							js ? "js" : "java");
+					String newTestCase = template.replaceAll("__TEST_CASE__", testCase)
+							.replaceAll("__TEST_CASE_NUMBER__", number)
+							.replace("__TEST_CASE_EXTENSION__", js ? "js" : "java");
 					Files.write(newFile, newTestCase.getBytes(Charset.defaultCharset()));
 				} else if (!js) {
 					String testCase = tc.getName();
@@ -73,7 +74,7 @@ public class JUnitCmd implements ICommand {
 				console.error(e);
 			}
 
-		});					
+		});
 	}
 
 }

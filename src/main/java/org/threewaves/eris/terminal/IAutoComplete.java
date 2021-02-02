@@ -4,7 +4,7 @@ import java.util.List;
 
 interface IAutoComplete {
 	public List<List<String>> complete(String text);
-	
+
 	public static int count(List<List<String>> completions) {
 		if (completions == null)
 			return 0;

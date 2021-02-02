@@ -12,7 +12,7 @@ import org.threewaves.eris.engine.test_case.TestCaseInsertCode;
 
 class InsertCodeCmd implements ICommand {
 	private final Engine eris;
-	
+
 	public InsertCodeCmd(Engine eris) {
 		this.eris = eris;
 	}
@@ -32,14 +32,14 @@ class InsertCodeCmd implements ICommand {
 		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(), eris.getModules());
 		parser.process(options);
 		List<TestCase> testCases = parser.testCases();
-		List<Module> modules = parser.modules();		
+		List<Module> modules = parser.modules();
 		testCases.forEach(tc -> {
 			try {
 				new TestCaseInsertCode().insert(tc, Module.toStringList(modules));
 			} catch (RuntimeException | IOException e) {
 				console.errorln(e.getMessage());
 			}
-		});			
+		});
 	}
 
 	@Override

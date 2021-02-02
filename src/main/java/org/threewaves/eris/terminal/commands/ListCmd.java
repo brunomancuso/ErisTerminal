@@ -36,9 +36,10 @@ class ListCmd implements ICommand {
 				console.notification(testCase.getFileName() + ICommandConsole.NEWLINE);
 			});
 		} else {
-			arguments.stream().map(arg -> TestCaseArgumentParser.parse(suit, arg)).flatMap(List::stream).filter(testCase -> filter(testCase, arguments)).forEach(testCase -> {
-				console.notification(testCase.getFileName() + ICommandConsole.NEWLINE);
-			});		
+			arguments.stream().map(arg -> TestCaseArgumentParser.parse(suit, arg)).flatMap(List::stream)
+					.filter(testCase -> filter(testCase, arguments)).forEach(testCase -> {
+						console.notification(testCase.getFileName() + ICommandConsole.NEWLINE);
+					});
 		}
 	}
 
@@ -46,7 +47,7 @@ class ListCmd implements ICommand {
 		if (arguments.size() == 0) {
 			return true;
 		}
-		String name = testCase.getName();		
+		String name = testCase.getName();
 		for (String f : arguments) {
 			if (name.contains(f.toLowerCase())) {
 				return true;

@@ -14,11 +14,11 @@ public class TestReport {
 		private final List<String> failedModules = new ArrayList<>();
 		private final Map<String, List<NormalDiff>> diff = new HashMap<>();
 		private long duration = 0;
-		
+
 		public List<String> failedModules() {
 			return Collections.unmodifiableList(failedModules);
 		}
-				
+
 		public long getDuration() {
 			return duration;
 		}
@@ -27,15 +27,16 @@ public class TestReport {
 			return failedModules.size() > 0;
 		}
 	}
+
 	private final Map<String, Report> reportByTestCase = new HashMap<>();
 	private final TestRun testRun;
 
 	private TestCase current;
-	
+
 	public TestReport() {
 		this.testRun = new TestRun();
 	}
-	
+
 	public void start(TestCase testCase) {
 		current = testCase;
 		reportByTestCase.put(current.getName(), new Report());
@@ -57,7 +58,7 @@ public class TestReport {
 
 	public void diff(String name, List<NormalDiff> diff) {
 		if (diff.size() > 0) {
-			currentReport().failedModules.add(name);			
+			currentReport().failedModules.add(name);
 		}
 		currentReport().diff.put(name, diff);
 	}
@@ -71,7 +72,7 @@ public class TestReport {
 		if (count == 0) {
 			System.out.println("----- Passed OK");
 		} else {
-			System.err.println("----- Failed TestCases " + count + "/" + reportByTestCase.size());			
+			System.err.println("----- Failed TestCases " + count + "/" + reportByTestCase.size());
 			Map<String, Integer> failedModules = failedModules();
 			if (failedModules.size() > 0) {
 				System.err.println("----- Modules Failed:");
@@ -80,7 +81,7 @@ public class TestReport {
 				}
 			}
 		}
-		
+
 	}
 
 	private Map<String, Integer> failedModules() {
@@ -92,7 +93,7 @@ public class TestReport {
 				}
 				map.put(m, map.get(m) + 1);
 			}
-		}		
+		}
 		return map;
 	}
 

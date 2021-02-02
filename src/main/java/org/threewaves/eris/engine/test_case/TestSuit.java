@@ -9,19 +9,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 public class TestSuit {
 	private final Path directory;
-	
+
 	public TestSuit(Path directory) {
 		this.directory = directory;
 	}
-	
-	public List<TestCase> list() {		
+
+	public List<TestCase> list() {
 		if (Files.exists(directory)) {
 			try (Stream<Path> s = Files.list(directory)) {
-				return s.filter((tc) -> TestCase.number(tc) > 0)
-						.map(p -> TestCase.of(p)).collect(Collectors.toList());
+				return s.filter((tc) -> TestCase.number(tc) > 0).map(p -> TestCase.of(p)).collect(Collectors.toList());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

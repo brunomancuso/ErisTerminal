@@ -39,10 +39,11 @@ class JConsole {
 	public interface IExecutionListener {
 		void execute(String command, List<String> options);
 	}
+
 	private static class PopUp extends JPopupMenu {
 		private static final long serialVersionUID = 1L;
 		JMenuItem copyButton;
-		
+
 		public PopUp(String mostRecentSelectedText) {
 			copyButton = new JMenuItem(new AbstractAction("copy") {
 				private static final long serialVersionUID = 1L;
@@ -60,30 +61,31 @@ class JConsole {
 		}
 	}
 
-	//private JTextArea component = new JTextArea();
+	// private JTextArea component = new JTextArea();
 	private JTextPane component = new JTextPane();
 
 	private static final String PROMPT = "e> ";
 	private static final String NEWLINE = "\r\n";
 	private final List<IExecutionListener> listeners = new ArrayList<>();
 	private MergeAutoComplete autoComplete = new MergeAutoComplete();
-	
-	public JConsole(Config config, TerminalHistory history, Collection<ICommand> cmds, Modules modules) {		
-		KeywordAutoComplete keywords = new KeywordAutoComplete();		
+
+	public JConsole(Config config, TerminalHistory history, Collection<ICommand> cmds, Modules modules) {
+		KeywordAutoComplete keywords = new KeywordAutoComplete();
 		keywords.add(cmds.stream().map(c -> c.name()).collect(Collectors.toList()));
 		keywords.add(modules.getList().stream().map(m -> m.getName()).collect(Collectors.toList()));
 		autoComplete.add(keywords).add(new DirectoryAutoComplete());
 		Color back = new Color(25, 29, 31);
-		Color front = NORMAL_COLOR;		
+		Color front = NORMAL_COLOR;
 
 		component.setBackground(back);
 		component.setFont(new Font(config.fontFamily, Font.PLAIN, config.fontSize));
 		component.setForeground(front);
 		component.setCaretColor(front);
 		DefaultCaret caret = (DefaultCaret) component.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);   
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		component.addMouseListener(new MouseAdapter() {
 			String mostRecentSelectedText = "";
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (component.getSelectedText() != null) // See if they selected something
@@ -99,42 +101,41 @@ class JConsole {
 				menu.show(e.getComponent(), e.getX(), e.getY());
 			}
 
-			
 		});
 		component.addFocusListener(new FocusAdapter() {
-		    public void focusGained(FocusEvent e) {
-		    	showPrompt();
-		    }
+			public void focusGained(FocusEvent e) {
+				showPrompt();
+			}
 		});
-		
+
 		component.addKeyListener(new KeyAdapter() {
-		    private String currentCommand;
+			private String currentCommand;
 
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					replacePrompt("");
 				}
 				if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-		    		if (currentPromptPosition() <= 0) {
-		    			e.consume();
-		    		}
-		    	}
-		    	if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-		    		if (currentPromptPosition() <= 0) {
-		    			e.consume();
+					if (currentPromptPosition() <= 0) {
+						e.consume();
+					}
+				}
+				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+					if (currentPromptPosition() <= 0) {
+						e.consume();
 						Toolkit.getDefaultToolkit().beep();
-		    		}
-		    	}
-		    	if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-		    		String text = currentPrompt();
-		    		if (currentPromptPosition() >= text.length()) {
-		    			e.consume();
-		    		}
-		    	}
-		    	if (e.getKeyCode() == KeyEvent.VK_UP) {
+					}
+				}
+				if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					String text = currentPrompt();
+					if (currentPromptPosition() >= text.length()) {
+						e.consume();
+					}
+				}
+				if (e.getKeyCode() == KeyEvent.VK_UP) {
 					e.consume();
-		    		if (history.getIndex() <= 0) {
-		    			history.resetIndex(); // It should never be less than zero, but you never know...
+					if (history.getIndex() <= 0) {
+						history.resetIndex(); // It should never be less than zero, but you never know...
 						Toolkit.getDefaultToolkit().beep();
 						return;
 					}
@@ -147,9 +148,9 @@ class JConsole {
 					String replacementCommand = history.getPrompt();
 					replacePrompt(replacementCommand);
 
-		    	}
-		    	if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-		    		e.consume(); // pretty sure you can't go down, but if you can... don't.
+				}
+				if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+					e.consume(); // pretty sure you can't go down, but if you can... don't.
 					if (history.getIndex() >= history.sizePrompt()) {
 						Toolkit.getDefaultToolkit().beep();
 						return;
@@ -163,26 +164,26 @@ class JConsole {
 						history.resetIndex();
 					}
 					replacePrompt(history.getPrompt());
-	
-		    	}
-		    	if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-		    		String text = currentPrompt();
-		    		if (text != null && text.length() > 0) {		    			
-		    			List<String> options = new ArrayList<>();
-		    			String[] tmp = text.split("\\s+");
-		    			if (tmp != null && tmp.length > 0) {
-		    				history.addPrompt(text);
-		    				history.save();
-			    			for (int i = 1; i < tmp.length; i++) {
-			    				options.add(tmp[i]);
+
+				}
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					String text = currentPrompt();
+					if (text != null && text.length() > 0) {
+						List<String> options = new ArrayList<>();
+						String[] tmp = text.split("\\s+");
+						if (tmp != null && tmp.length > 0) {
+							history.addPrompt(text);
+							history.save();
+							for (int i = 1; i < tmp.length; i++) {
+								options.add(tmp[i]);
 							}
-			    			publishExecution(tmp[0], Collections.unmodifiableList(options));
-		    			}
-		    			newPrompt();		    		   
-		    		} else {
-		    			newPrompt();
-		    		}
-		    	}
+							publishExecution(tmp[0], Collections.unmodifiableList(options));
+						}
+						newPrompt();
+					} else {
+						newPrompt();
+					}
+				}
 				if (e.getKeyCode() == KeyEvent.VK_TAB) {
 					e.consume();
 					String input = currentPrompt();
@@ -227,14 +228,14 @@ class JConsole {
 					}
 				}
 
-		    	
-		    }
+			}
 		});
 	}
+
 	private void publishExecution(String command, List<String> options) {
 		listeners.forEach(e -> {
 			try {
-				e.execute(command, options);	
+				e.execute(command, options);
 			} catch (IllegalArgumentException ex) {
 				System.err.println("Error in parameters");
 				System.err.println(ex.getMessage());
@@ -242,11 +243,11 @@ class JConsole {
 			}
 		});
 	}
-	
+
 	public void addExecutionListener(IExecutionListener listener) {
 		this.listeners.add(listener);
 	}
-	
+
 	void newPrompt() {
 		System.out.print(PROMPT);
 		showPrompt();
@@ -263,7 +264,7 @@ class JConsole {
 			component.setCaretPosition(lastOffset - 1);
 		}
 	}
-	
+
 	private void replacePrompt(String prompt) {
 		try {
 			int caretOffset = component.getCaretPosition();
@@ -273,20 +274,21 @@ class JConsole {
 			remove(startOffset, endOffset);
 			append(NORMAL_COLOR, PROMPT + prompt);
 		} catch (RuntimeException | BadLocationException e) {
-		}		
+		}
 	}
 
 	private int getLineEndOffset(int line) throws BadLocationException {
 		return SwingHelper.getLineEndOffset(component, line);
 	}
-	
+
 	private int getLineStartOffset(int line) throws BadLocationException {
 		return SwingHelper.getLineStartOffset(component, line);
 	}
+
 	private int getLineOfOffset(int offset) throws BadLocationException {
 		return SwingHelper.getLineOfOffset(component, offset);
 	}
-	
+
 	public String currentPrompt() {
 		try {
 			int caretOffset = component.getCaretPosition();
@@ -306,26 +308,26 @@ class JConsole {
 		try {
 			int caretOffset = component.getCaretPosition();
 			int lineNumber = getLineOfOffset(caretOffset);
-			int startOffset = getLineStartOffset(lineNumber);						
+			int startOffset = getLineStartOffset(lineNumber);
 			return caretOffset - startOffset - PROMPT.length();
 		} catch (RuntimeException | BadLocationException e) {
 		}
 		return -1;
 	}
-	
+
 	public Component getComponent() {
 		return component;
 	}
-	
+
 	public void append(Color color, String val) {
 		SwingHelper.appendString(component, val, color);
 	}
-	
+
 	public void remove(int start, int end) {
 		component.select(start, end);
 		component.replaceSelection("");
 	}
-	
+
 	public int size() {
 		return SwingHelper.getLastOffset(component) + 1;
 	}

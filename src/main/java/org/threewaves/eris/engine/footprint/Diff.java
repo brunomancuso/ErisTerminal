@@ -12,11 +12,10 @@ import java.util.stream.Collectors;
 
 import org.threewaves.eris.util.ShellExec;
 
-
 public class Diff {
 	private final Path diff = Paths.get("bin", "diff.exe");
 	private final static Path OUT = Paths.get("out");
-	
+
 	public static boolean isDirection(String line) {
 		return line.charAt(0) == '>' || line.charAt(0) == '<';
 	}
@@ -50,11 +49,13 @@ public class Diff {
 		Files.deleteIfExists(Paths.get(OUT.toString(), "right.tmp"));
 		Files.write(Paths.get(OUT.toString(), "left.tmp"), left.getBytes(Charset.defaultCharset()));
 		Files.write(Paths.get("OUT.toString(), right.tmp"), right.getBytes(Charset.defaultCharset()));
-		List<NormalDiff> diff = new Diff().ndiff(Paths.get(OUT.toString(), "left.tmp"), Paths.get(OUT.toString(), "right.tmp"));
+		List<NormalDiff> diff = new Diff().ndiff(Paths.get(OUT.toString(), "left.tmp"),
+				Paths.get(OUT.toString(), "right.tmp"));
 		return diff;
 	}
 
 	public static List<NormalDiff> diff(List<String> left, List<String> right) throws IOException {
-		return diff(left.stream().collect(Collectors.joining("\r\n")), right.stream().collect(Collectors.joining("\r\n")));
+		return diff(left.stream().collect(Collectors.joining("\r\n")),
+				right.stream().collect(Collectors.joining("\r\n")));
 	}
 }

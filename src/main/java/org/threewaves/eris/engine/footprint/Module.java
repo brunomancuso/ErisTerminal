@@ -26,7 +26,7 @@ public class Module {
 	private final String name;
 	private final List<String> groups = new ArrayList<>();
 	private final List<String> patterns = new ArrayList<>();
-	
+
 	private transient List<Pattern> oneLine = new ArrayList<>();
 	private transient List<Pair<Pattern, Pattern>> twoLine = new ArrayList<>();
 	private transient int mark;
@@ -108,7 +108,8 @@ public class Module {
 		return assertExpected(testRun, name, testCase, actual);
 	}
 
-	public List<NormalDiff> assertExpected(TestRun testRun, String name, TestCase testCase, List<String> actual) throws IOException {
+	public List<NormalDiff> assertExpected(TestRun testRun, String name, TestCase testCase, List<String> actual)
+			throws IOException {
 		if (testCase == null) {
 			System.err.println("Test case is null");
 			return Collections.emptyList();
@@ -150,8 +151,8 @@ public class Module {
 		return assertExpected(testRun, name, testCase.getName(), expectedContent, actual);
 	}
 
-	private List<NormalDiff> assertExpected(TestRun testRun, String name, String testCaseName, List<String> expectedContent, List<String> actual)
-			throws IOException {
+	private List<NormalDiff> assertExpected(TestRun testRun, String name, String testCaseName,
+			List<String> expectedContent, List<String> actual) throws IOException {
 		List<String> raw = new ArrayList<>();
 		raw.addAll(actual);
 		applyEscapePatternTo(actual);
@@ -195,8 +196,9 @@ public class Module {
 		}
 	}
 
-	private static void writeContent(Path file, String ss) throws IOException {		
-		try (OutputStreamWriter ws = new OutputStreamWriter(new FileOutputStream(file.toFile()), Charset.defaultCharset())) {
+	private static void writeContent(Path file, String ss) throws IOException {
+		try (OutputStreamWriter ws = new OutputStreamWriter(new FileOutputStream(file.toFile()),
+				Charset.defaultCharset())) {
 			ws.write(ss);
 		}
 	}
@@ -234,8 +236,7 @@ public class Module {
 			if (matcher.groupCount() == 0) {
 				// int matchedLength = matcher.end() - matcher.start();
 				String replaceStr = ".";// padLeft("", matchedLength, ".");
-				line = line.substring(0, matcher.start()) + replaceStr
-						+ line.substring(matcher.end());
+				line = line.substring(0, matcher.start()) + replaceStr + line.substring(matcher.end());
 			} else {
 				int groupCount = matcher.groupCount();
 				for (int j = 0; j < groupCount; j++) {

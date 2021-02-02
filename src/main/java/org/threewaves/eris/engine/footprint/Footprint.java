@@ -18,7 +18,7 @@ public class Footprint {
 		this.path = Paths.get("logs", name + ".footprint");
 	}
 
-	public <T> T write(T object) {		
+	public <T> T write(T object) {
 		return write("", object);
 	}
 
@@ -29,19 +29,19 @@ public class Footprint {
 		}
 		return write(header, object);
 	}
-	
+
 	public synchronized <T> T write(String header, T object) {
 		try {
 			String w = "";
 			if (object == null) {
 			} else if (String.class.isInstance(object) || ClassUtils.isPrimitiveOrWrapper(object.getClass())) {
-				w = header + object.toString() + NEWLINE;								
+				w = header + object.toString() + NEWLINE;
 			} else {
-				w = header + PrettyGson.create().toJson(object) + NEWLINE;		
+				w = header + PrettyGson.create().toJson(object) + NEWLINE;
 			}
 			if (!w.isEmpty()) {
 				if (!Files.exists(path)) {
-					Files.write(path, w.getBytes(Charset.defaultCharset()));					
+					Files.write(path, w.getBytes(Charset.defaultCharset()));
 				} else {
 					Files.write(path, w.getBytes(Charset.defaultCharset()), StandardOpenOption.APPEND);
 				}
@@ -50,5 +50,5 @@ public class Footprint {
 			e.printStackTrace();
 		}
 		return object;
-	}	
+	}
 }

@@ -1,6 +1,5 @@
 package org.threewaves.eris.engine;
 
-
 public class ConfigException extends Exception {
 	private static final long serialVersionUID = 1L;
 

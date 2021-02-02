@@ -212,8 +212,7 @@ public class NormalDiff {
 		for (int i = 0; i < diffs.size(); i++) {
 			if (left && line >= diffs.get(i).leftPosition.start && line <= diffs.get(i).leftPosition.end) {
 				return i;
-			} else if (!left && line >= diffs.get(i).rightPosition.start
-					&& line <= diffs.get(i).rightPosition.end) {
+			} else if (!left && line >= diffs.get(i).rightPosition.start && line <= diffs.get(i).rightPosition.end) {
 				return i;
 			}
 		}

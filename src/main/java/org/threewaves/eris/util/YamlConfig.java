@@ -7,8 +7,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.representer.Representer;
 
-
-public class YamlConfig {	
+public class YamlConfig {
 	private static Yaml yaml() {
 		Representer representer = new Representer();
 		representer.getPropertyUtils().setSkipMissingProperties(true);
@@ -24,6 +23,7 @@ public class YamlConfig {
 	public static <T> T create(byte[] bytes, T defaultValue) {
 		return create(new String(bytes, Charset.defaultCharset()), defaultValue);
 	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T create(String content, T defaultValue) {
 		try {
@@ -42,5 +42,5 @@ public class YamlConfig {
 		} catch (RuntimeException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
-	}	
+	}
 }

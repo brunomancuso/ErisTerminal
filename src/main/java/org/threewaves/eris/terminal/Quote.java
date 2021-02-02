@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
 class Quote {
 	public final String text;
 	public final String author;
-	
+
 	public Quote(String text, String author) {
 		this.text = text;
 		this.author = author;
@@ -23,18 +23,18 @@ class Quote {
 	public static List<Quote> quotes() {
 		try {
 			String q = IOUtils.toString(Quote.class.getResourceAsStream("/quotes.json"));
-			return new Gson().fromJson(q, new TypeToken<List<Quote>>() {}.getType());
+			return new Gson().fromJson(q, new TypeToken<List<Quote>>() {
+			}.getType());
 		} catch (JsonSyntaxException | IOException e) {
 		}
 		return Collections.emptyList();
 	}
-	
+
 	public static String random() {
 		long ms = new Date().getTime() % 1000;
 		List<Quote> qs = quotes();
 		return qs.get((int) (ms % qs.size())).text;
 	}
-	
 
 	public static void main(String[] args) {
 		System.out.println(quotes().get(0));
