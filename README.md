@@ -1,6 +1,6 @@
 # Eris - System/Integration Testing Framework
 
-This document will try to explained about this very simple and yet powerful testing framework. This framework is mainly aimed for writing integration test cases or system test cases for java services. It can be integrated for visual desktop solutions as swing or javafx, but in the first iteration it will not be included. The test cases can be written in JS or JUnit, and the framework focus on the regression and easy to maintain.   
+This document will try to explained about this very simple and yet powerful testing framework. This framework is mainly aimed for writing integration test cases or system test cases for java software. It can be integrated for visual desktop solutions as swing or javafx, but in the first iteration it will not be included. The test cases can be written in JS or JUnit, and the framework focus on the regression and easy to maintain. In addition, there is a repository with some samples on how to integrate and use this framework [Eris Framework Examples](https://github.com/brunomancuso/ErisExamples/).  
  
 The framework was written taken account some very simple principles and requirements: 
 - Written in Java, small code footprint. Because every software/product is very different in many aspects, it is very important that the framework is should be easy to modify and that the code of apart from being open source is easy to understand.  
@@ -90,7 +90,7 @@ Complete command list:
 	cmd: [<directory>]
 	cmd32 [<directory>]
 	run [<test case list>] [<include module list>] [&|-bg]
-	junit
+	junit [<test case list>]
 	copy <Test case>
 	cls
 	actual <test case> <module name>
@@ -134,7 +134,7 @@ As mentioned earlier to integrate with the Eris engine, we have to implement thi
 		List<ICommand> createExternalCommands();
 	}
 
-In <URL> we have some projects with some examples of how to write the integration and structure of the test suit.
+In [Eris Framework Examples](https://github.com/brunomancuso/ErisExamples) we have some projects with some examples of how to write the integration and the structure of the test suit.
 
 ## External Commmands
 
@@ -245,7 +245,7 @@ In this example the simulators uses a very simple static memory simulator, we sp
 		//prepare simulator response
 		Simulator.put("authorize", "MESSAGE_APPROVED");	
 
-This complete example can be found here: <URL>
+This complete example can be found here: https://github.com/brunomancuso/ErisExamples/tree/main/st_examples
 
 ## Modules/Footprint
 
@@ -272,11 +272,11 @@ You have to specify the name and the file that should be monitored. The pattern 
 
 ## Jenkins integrations
 
-With the command junit, we can generate a JUnit test case from the JS test case, in this way we can later on integrate all test cases to run in a jenkins server so that we can make daily nightly regression. This is very useful when the amount of test cases start to increase to the hundreds, and you need to monitorthe different test suits.
+With the command junit, we can generate a JUnit test case from the JS test case, in this way we can later on integrate all test cases to run in a jenkins server so that we can make daily nightly regression. This is very useful when the amount of test cases start to increase to the hundreds, and you need to monitor the different test suits.
 
 ## After notes
 
-This framework has been completely rewritten and has been inspired by other similar framework that I have been doing the last couple of years, and this is the output of many discussions I have had with Sebastian Fontana on how to implement an simple, clean and maintainable testing environment. The main purpose is that the framework should be simple and easy to extend, in case one need to change it to your porduct needs. Because it has been rewritten it might contains some bugs, just report them and I'll fix them a soon as possible, also and suggestion would be gladly appreciated.
+This framework has been completely rewritten and has been inspired by other similar framework that I have done the last couple of years, and this is the output of many discussions I have had with Sebastian Fontana on how to implement an simple, clean and maintainable testing environment. The main purpose is that the framework should be simple and easy to extend, in case one need to change it to a specific product needs. Because it has been rewritten it might contains some bugs, just report them and I'll fix them a soon as possible, also and suggestion would be gladly appreciated.
 
  
 	
