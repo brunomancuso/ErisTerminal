@@ -231,20 +231,22 @@ public class Module {
 	}
 
 	private String match(Pattern pattern, String line) {
+		boolean orderFront = true;
 		Matcher matcher = pattern.matcher(line);
 		if (matcher.find()) {
 			if (matcher.groupCount() == 0) {
-				// int matchedLength = matcher.end() - matcher.start();
 				String replaceStr = ".";// padLeft("", matchedLength, ".");
 				line = line.substring(0, matcher.start()) + replaceStr + line.substring(matcher.end());
 			} else {
 				int groupCount = matcher.groupCount();
 				for (int j = 0; j < groupCount; j++) {
-					int i = groupCount - j - 1;
-					// String group = matcher.group(i + 1);
+					int i = groupCount - j;
+					if (orderFront) {
+						i = j;
+					}
 					String replaceStr = ".";// padLeft("", group.length(), ".");
-					int start = matcher.start(i + 1);
-					int end = matcher.end(i + 1);
+					int start = matcher.start(i);
+					int end = matcher.end(i);
 					if (start >= 0 && start <= end && end < line.length()) {
 						line = line.substring(0, start) + replaceStr + line.substring(end);
 					}

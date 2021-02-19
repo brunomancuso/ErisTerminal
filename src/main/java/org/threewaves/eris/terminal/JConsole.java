@@ -23,6 +23,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 
@@ -61,9 +62,16 @@ class JConsole {
 		}
 	}
 
-	// private JTextArea component = new JTextArea();
-	private JTextPane component = new JTextPane();
-
+	private JTextPane component = new JTextPane() {
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			Component parent = getParent();
+			ComponentUI ui = getUI();
+			return parent != null ? (ui.getPreferredSize(this).width <= parent.getSize().width) : true;
+		}		
+	};
 	private static final String PROMPT = "e> ";
 	private static final String NEWLINE = "\r\n";
 	private final List<IExecutionListener> listeners = new ArrayList<>();
