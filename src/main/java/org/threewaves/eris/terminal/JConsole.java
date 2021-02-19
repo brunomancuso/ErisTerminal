@@ -109,11 +109,13 @@ class JConsole {
 		});
 
 		component.addKeyListener(new KeyAdapter() {
-			private String currentCommand;
+			private String currentCommand = null;
 
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					replacePrompt("");
+					history.maxIndex();
+					currentCommand = null;
 				}
 				if (e.getKeyCode() == KeyEvent.VK_HOME) {
 					homePrompt();
@@ -148,6 +150,7 @@ class JConsole {
 						currentCommand = currentPrompt(); // save the current command, for down arrow use.
 					}
 					history.decreaseIndex();
+				
 					// Index prompts and write the replacement.
 					String replacementCommand = history.getPrompt();
 					replacePrompt(replacementCommand);
@@ -161,7 +164,9 @@ class JConsole {
 					}
 					history.increaseIndex();
 					if (history.getIndex() == history.sizePrompt()) {
-						replacePrompt(currentCommand);
+						if (currentCommand != null) {
+							replacePrompt(currentCommand);
+						}
 						return;
 					}
 					if (history.getIndex() < 0) {
@@ -175,6 +180,7 @@ class JConsole {
 					if (text != null && text.length() > 0) {
 						List<String> options = new ArrayList<>();
 						String[] tmp = text.split("\\s+");
+						currentCommand = null;
 						if (tmp != null && tmp.length > 0) {
 							history.addPrompt(text);
 							history.save();
@@ -183,6 +189,7 @@ class JConsole {
 							}
 							publishExecution(tmp[0], Collections.unmodifiableList(options));
 						}
+						history.maxIndex();
 						newPrompt();
 					} else {
 						newPrompt();
@@ -254,8 +261,7 @@ class JConsole {
 
 	void homePrompt() {
 		try {
-			int caretOffset = component.getCaretPosition();
-			int lineNumber = getLineOfOffset(caretOffset);
+			int lineNumber = lineNumberPrompt();
 			int startOffset = getLineStartOffset(lineNumber);
 			component.setCaretPosition(startOffset + PROMPT.length());
 		} catch (RuntimeException | BadLocationException e) {
@@ -282,8 +288,7 @@ class JConsole {
 
 	private void replacePrompt(String prompt) {
 		try {
-			int caretOffset = component.getCaretPosition();
-			int lineNumber = getLineOfOffset(caretOffset);
+			int lineNumber = lineNumberPrompt();
 			int startOffset = getLineStartOffset(lineNumber);
 			int endOffset = getLineEndOffset(lineNumber);
 			remove(startOffset, endOffset);
@@ -307,8 +312,7 @@ class JConsole {
 
 	public String currentPrompt() {
 		try {
-			int caretOffset = component.getCaretPosition();
-			int lineNumber = getLineOfOffset(caretOffset);
+			int lineNumber = lineNumberPrompt();
 			int startOffset = getLineStartOffset(lineNumber);
 			int endOffset = getLineEndOffset(lineNumber);
 			String text = component.getText(startOffset, endOffset - startOffset - 1);
@@ -318,6 +322,15 @@ class JConsole {
 		} catch (RuntimeException | BadLocationException e) {
 		}
 		return "";
+	}
+
+	private int lineNumberPrompt() {
+		try {
+			int offset = SwingHelper.getLastOffset(component) - 1;		
+			return getLineOfOffset(offset);
+		} catch (RuntimeException | BadLocationException e) {
+		}
+		return 0;
 	}
 
 	public int currentPromptPosition() {

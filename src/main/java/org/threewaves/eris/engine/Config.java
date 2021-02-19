@@ -24,7 +24,7 @@ public class Config {
 		testCaseDirectory = "../src/main/test-case";
 		scriptEngine = "ECMAScript";
 		fontFamily = "Consolas";
-		fontSize = 14;
+		fontSize = 12;
 	}
 
 	public static Config create() throws ConfigException {

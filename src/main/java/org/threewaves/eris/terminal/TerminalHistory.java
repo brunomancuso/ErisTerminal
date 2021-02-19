@@ -85,8 +85,10 @@ class TerminalHistory {
 	}
 
 	public void addPrompt(String line) {
-		prompts.add(line);
-		index = prompts.size();
+		if (prompts.size() == 0 || !prompts.get(prompts.size() - 1).equals(line)) {
+			prompts.add(line);
+			index = prompts.size();
+		}
 
 	}
 
