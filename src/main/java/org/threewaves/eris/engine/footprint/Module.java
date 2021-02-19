@@ -245,7 +245,9 @@ public class Module {
 					String replaceStr = ".";// padLeft("", group.length(), ".");
 					int start = matcher.start(i + 1);
 					int end = matcher.end(i + 1);
-					line = line.substring(0, start) + replaceStr + line.substring(end);
+					if (start >= 0 && start <= end && end < line.length()) {
+						line = line.substring(0, start) + replaceStr + line.substring(end);
+					}
 				}
 			}
 		}

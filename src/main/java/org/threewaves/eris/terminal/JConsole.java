@@ -115,6 +115,10 @@ class JConsole {
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					replacePrompt("");
 				}
+				if (e.getKeyCode() == KeyEvent.VK_HOME) {
+					homePrompt();
+					e.consume();
+				}
 				if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 					if (currentPromptPosition() <= 0) {
 						e.consume();
@@ -248,6 +252,17 @@ class JConsole {
 		this.listeners.add(listener);
 	}
 
+	void homePrompt() {
+		try {
+			int caretOffset = component.getCaretPosition();
+			int lineNumber = getLineOfOffset(caretOffset);
+			int startOffset = getLineStartOffset(lineNumber);
+			component.setCaretPosition(startOffset + PROMPT.length());
+		} catch (RuntimeException | BadLocationException e) {
+		//nothing
+		}
+	}
+
 	void newPrompt() {
 		System.out.print(PROMPT);
 		showPrompt();
@@ -274,6 +289,7 @@ class JConsole {
 			remove(startOffset, endOffset);
 			append(NORMAL_COLOR, PROMPT + prompt);
 		} catch (RuntimeException | BadLocationException e) {
+			//nothing
 		}
 	}
 
