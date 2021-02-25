@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.brunomancuso</groupId>
 	<artifactId>eris-terminal</artifactId>
-	<version>1.0.5-SNAPSHOT</version>
+	<version>1.0.5</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -240,7 +240,7 @@
 		<connection>scm:git:git://github.com/brunomancuso/ErisTerminal.git</connection>
 		<developerConnection>scm:git:git@github.com:brunomancuso/ErisTerminal.git</developerConnection>
 		<url>https://github.com/brunomancuso/ErisTerminal</url>
-		<tag>HEAD</tag>
+		<tag>eris-terminal-1.0.5</tag>
 	</scm>
 	
 </project>
