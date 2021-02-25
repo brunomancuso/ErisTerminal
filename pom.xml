@@ -2,10 +2,37 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.brunomancuso</groupId>
 	<artifactId>eris-terminal</artifactId>
-	<version>1.0.6-SNAPSHOT</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<name>Eris Terminal</name>
+	<description>Eris - System/Integration Testing Framework</description>
+	<url>https://github.com/brunomancuso/ErisTerminal</url>
+
+	<organization>
+		<url>https://github.com/brunomancuso</url>
+		<name>BrunoMancuso</name>
+	</organization>
+	
+	<inceptionYear>2020</inceptionYear>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Bruno Mancuso</name>
+			<organization>Bruno Mancuso</organization>
+			<organizationUrl>https://github.com/brunomancuso</organizationUrl>
+		</developer>
+	</developers>
+	
 	<build>
 		<plugins>
 			<plugin>
