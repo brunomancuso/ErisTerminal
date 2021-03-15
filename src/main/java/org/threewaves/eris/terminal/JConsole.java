@@ -38,7 +38,7 @@ class JConsole {
 
 	@FunctionalInterface
 	public interface IExecutionListener {
-		void execute(String command, List<String> options);
+		void execute(String command, List<String> options, Runnable onFinish);
 	}
 
 	private static class PopUp extends JPopupMenu {
@@ -124,29 +124,24 @@ class JConsole {
 					replacePrompt("");
 					history.maxIndex();
 					currentCommand = null;
-				}
-				if (e.getKeyCode() == KeyEvent.VK_HOME) {
+				} else if (e.getKeyCode() == KeyEvent.VK_HOME) {
 					homePrompt();
 					e.consume();
-				}
-				if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 					if (currentPromptPosition() <= 0) {
 						e.consume();
 					}
-				}
-				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+				} else  if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					if (currentPromptPosition() <= 0) {
 						e.consume();
 						Toolkit.getDefaultToolkit().beep();
 					}
-				}
-				if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 					String text = currentPrompt();
 					if (currentPromptPosition() >= text.length()) {
 						e.consume();
 					}
-				}
-				if (e.getKeyCode() == KeyEvent.VK_UP) {
+				} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 					e.consume();
 					if (history.getIndex() <= 0) {
 						history.resetIndex(); // It should never be less than zero, but you never know...
@@ -163,8 +158,7 @@ class JConsole {
 					String replacementCommand = history.getPrompt();
 					replacePrompt(replacementCommand);
 
-				}
-				if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 					e.consume(); // pretty sure you can't go down, but if you can... don't.
 					if (history.getIndex() >= history.sizePrompt()) {
 						Toolkit.getDefaultToolkit().beep();
@@ -182,8 +176,7 @@ class JConsole {
 					}
 					replacePrompt(history.getPrompt());
 
-				}
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					String text = currentPrompt();
 					if (text != null && text.length() > 0) {
 						List<String> options = new ArrayList<>();
@@ -195,15 +188,14 @@ class JConsole {
 							for (int i = 1; i < tmp.length; i++) {
 								options.add(tmp[i]);
 							}
-							publishExecution(tmp[0], Collections.unmodifiableList(options));
+							history.maxIndex();
+							publishExecution(tmp[0], Collections.unmodifiableList(options), () -> newPrompt());
 						}
-						history.maxIndex();
-						newPrompt();
+						
 					} else {
 						newPrompt();
 					}
-				}
-				if (e.getKeyCode() == KeyEvent.VK_TAB) {
+				} else if (e.getKeyCode() == KeyEvent.VK_TAB) {
 					e.consume();
 					String input = currentPrompt();
 					List<List<String>> completions = autoComplete.complete(input);
@@ -246,15 +238,14 @@ class JConsole {
 						System.out.print(input);
 					}
 				}
-
 			}
 		});
 	}
 
-	private void publishExecution(String command, List<String> options) {
+	private void publishExecution(String command, List<String> options, Runnable onFinish) {
 		listeners.forEach(e -> {
 			try {
-				e.execute(command, options);
+				e.execute(command, options, onFinish);
 			} catch (IllegalArgumentException ex) {
 				System.err.println("Error in parameters");
 				System.err.println(ex.getMessage());

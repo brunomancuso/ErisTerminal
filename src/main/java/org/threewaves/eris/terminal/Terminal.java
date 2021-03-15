@@ -34,8 +34,9 @@ public class Terminal {
 	private final ComponentOutputStream notification;
 	private final JFrame frame;
 
-	private JConsole console;
-
+	private final JConsole console;
+	private final ExecutionQueue executionQueue;
+	
 	public Terminal(String[] args) throws ConfigException, UnsupportedEncodingException {
 		Config config = Config.create();
 		TerminalHistory history = TerminalHistory.load();
@@ -94,14 +95,12 @@ public class Terminal {
 		CommandConsole defaultConsole = new CommandConsole(outStream, errorStream, notificationStream, (enable) -> {
 			enableStreams(enable);
 		});
-		console.addExecutionListener((c, o) -> {
-			defaultConsole.stdout(c + " " + o);
+		executionQueue = new ExecutionQueue(defaultConsole);
+		executionQueue.start();
+		console.addExecutionListener((c, o, onFinish) -> {
 			ICommand cmd = commands.get(c);
-			if (cmd != null) {
-				cmd.exec(defaultConsole, o);
-			} else {
-				System.err.println("Command not found");
-			}
+			defaultConsole.stdout(c + " " + o);			
+			executionQueue.execute(cmd, o, onFinish);
 		});
 		JScrollPane scroll = new JScrollPane( //
 				console.getComponent(), //

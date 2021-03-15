@@ -8,6 +8,11 @@ import org.threewaves.eris.engine.test_case.TestSuit;
 import org.threewaves.eris.util.Reflection;
 import org.threewaves.eris.util.YamlConfig;
 
+/**
+ * Configuration properties 
+ * @author Bruno Mancuso
+ *
+ */
 public class Config {
 	public final String notepad;
 	public final String diffw;
@@ -27,6 +32,11 @@ public class Config {
 		fontSize = 12;
 	}
 
+	/**
+	 * Creates or loads the configuration properties of the eris runtime engine.
+	 * @return the current configuration properties
+	 * @throws ConfigException
+	 */
 	public static Config create() throws ConfigException {
 		try {
 			if (!Files.exists(Paths.get("out"))) {
@@ -44,10 +54,18 @@ public class Config {
 		}
 	}
 
+	/**
+	 * Creates a eris factory from configuration.
+	 * @return
+	 */
 	public IErisFactory createFactory() {
 		return Reflection.newInstance(factory, IErisFactory.class);
 	}
 
+	/**
+	 * Creates a test suit from configuration
+	 * @return a test suit
+	 */
 	public TestSuit createTestSuit() {
 		return new TestSuit(Paths.get(testCaseDirectory));
 	}

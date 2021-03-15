@@ -8,6 +8,11 @@ import org.threewaves.eris.engine.IBuilder.Scope;
 import org.threewaves.eris.engine.footprint.Modules;
 import org.threewaves.eris.engine.test_case.TestSuit;
 
+/**
+ * Eris engine runtime, contains the modules that are configurated, the eris factory, 
+ * the engine builders and the location of the current test suit.
+ * @author Bruno Mancuso 
+ */
 public class Engine {
 	private final Modules modules = new Modules();
 	private final IErisFactory factory;
@@ -19,6 +24,10 @@ public class Engine {
 		this.factory = factory;
 	}
 
+	/**
+	 * Initialized the eris engine. The engine scope builders are created, and the modules are loaded. 
+	 * @throws ConfigException
+	 */
 	public void initialize() throws ConfigException {
 		List<IBuilder> list = factory.createBuilders(Scope.ENGINE);
 		if (list != null) {
@@ -28,6 +37,10 @@ public class Engine {
 		modules.refresh();
 	}
 
+	/**
+	 * Create the suit scope builders.
+	 * @return
+	 */
 	public List<IBuilder> createSuitBuilders() {
 		List<IBuilder> list = factory.createBuilders(Scope.TEST_SUIT);
 		if (list == null) {
@@ -37,6 +50,10 @@ public class Engine {
 		return list;
 	}
 
+	/**
+	 * Validate builders.
+	 * @param list builders to validate
+	 */
 	private void validateBuilders(List<IBuilder> list) {
 		list.stream().forEach(b -> {
 			if (b.name().isEmpty()) {
@@ -46,10 +63,19 @@ public class Engine {
 		});
 	}
 
+	/**
+	 * Sleep method to be invoked from test cases. 
+	 * @param time to sleep
+	 * @throws InterruptedException
+	 */
 	public void sleep(long time) throws InterruptedException {
 		Thread.sleep(1000);
 	}
 
+	/**
+	 * Create test case builders.
+	 * @return list of builders with test case scope
+	 */
 	public List<IBuilder> createTestCaseBuilders() {
 		List<IBuilder> list = factory.createBuilders(Scope.TEST_CASE);
 		if (list == null) {
@@ -60,22 +86,41 @@ public class Engine {
 
 	}
 
+	/**
+	 * Engine builders
+	 * @return Engine builders
+	 */
 	public List<IBuilder> getEngineBuilders() {
 		return engineBuilders;
 	}
 
+	/**
+	 * Destroy eris runtime engine.
+	 */
 	public void destroy() {
 		engineBuilders.stream().forEach(b -> destroy());
 	}
 
+	/**
+	 * 
+	 * @return eris factory
+	 */
 	public IErisFactory getFactory() {
 		return factory;
 	}
 
+	/**
+	 * 
+	 * @return test suit
+	 */
 	public TestSuit getTestSuit() {
 		return suit;
 	}
 
+	/**
+	 * 
+	 * @return modules
+	 */
 	public Modules getModules() {
 		return modules;
 	}

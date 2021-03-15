@@ -163,7 +163,7 @@ public class TestCaseRunner {
 			suitBuilders.stream().forEach(b -> engineScope.put(b.name(), b));
 			eris.getEngineBuilders().stream().forEach(b -> engineScope.put(b.name(), b));
 			engineScope.put("out", System.out);
-			engineScope.put("eris", engine);
+			engineScope.put("eris", eris);
 			engineScope.put("stacktrace", new Stacktrace(testCase.getPath()));
 			engine.eval(reader, newContext);
 			engine.eval("try {\n" + "   test();\n" + "} catch(e) {\n" + "   stacktrace.error(e);" + "}\n", newContext);

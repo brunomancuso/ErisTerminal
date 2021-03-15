@@ -3,6 +3,11 @@ package org.threewaves.eris.engine;
 import java.io.PrintStream;
 import java.util.function.Consumer;
 
+/**
+ * 
+ * @author Bruno Mancuso
+ *
+ */
 public class CommandConsole implements ICommandConsole {
 	private final PrintStream stdout;
 	private final PrintStream stderr;
