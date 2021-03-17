@@ -34,6 +34,7 @@ public class ShellExec {
 	 * @param workdir working directory or NULL to use command folder
 	 * @param wait    wait for process to end
 	 * @param args    0..n command line arguments
+	 * @throws IOException
 	 * @return process exit code
 	 */
 
@@ -141,7 +142,7 @@ public class ShellExec {
 		/**
 		 * Get inputstream buffer or null if stream was not consumed.
 		 * 
-		 * @return
+		 * @return return process output
 		 */
 		public String getOutput() {
 			return (output != null ? output.toString() : null);
@@ -150,7 +151,7 @@ public class ShellExec {
 		/**
 		 * Is input stream completed.
 		 * 
-		 * @return
+		 * @return true if the process is terminated
 		 */
 		public boolean isCompleted() {
 			return completed;

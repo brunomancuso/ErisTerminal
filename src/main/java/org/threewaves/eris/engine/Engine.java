@@ -19,6 +19,11 @@ public class Engine {
 	private final List<IBuilder> engineBuilders = new ArrayList<>();
 	private final TestSuit suit;
 
+	/**
+	 * Create an engine instance
+	 * @param factory of the engin e
+	 * @param suit the test case suit of the engine
+	 */
 	public Engine(IErisFactory factory, TestSuit suit) {
 		this.suit = suit;
 		this.factory = factory;
@@ -39,7 +44,7 @@ public class Engine {
 
 	/**
 	 * Create the suit scope builders.
-	 * @return
+	 * @return suit builder list
 	 */
 	public List<IBuilder> createSuitBuilders() {
 		List<IBuilder> list = factory.createBuilders(Scope.TEST_SUIT);

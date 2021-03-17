@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 
 import org.threewaves.eris.util.ShellExec;
 
+/**
+ * Wrapper for the diff linux command
+ * @author Bruno Mancuso
+ *
+ */
 public class Diff {
 	private final Path diff = Paths.get("bin", "diff.exe");
 	private final static Path OUT = Paths.get("out");

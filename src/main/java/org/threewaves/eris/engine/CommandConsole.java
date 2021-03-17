@@ -14,6 +14,13 @@ public class CommandConsole implements ICommandConsole {
 	private final PrintStream notificationStream;
 	private Consumer<Boolean> onChanged;
 
+	/**
+	 * Creating Command console
+	 * @param newOut new output stream
+	 * @param newErr new error stream
+	 * @param notificationStream notification stream
+	 * @param onChanged on change state callback
+	 */
 	public CommandConsole(PrintStream newOut, PrintStream newErr, PrintStream notificationStream,
 			Consumer<Boolean> onChanged) {
 		stdout = System.out;
@@ -24,9 +31,6 @@ public class CommandConsole implements ICommandConsole {
 		this.notificationStream = notificationStream;
 	}
 
-	public CommandConsole install() {
-		return this;
-	}
 
 	@Override
 	public void print(String str) {
@@ -65,12 +69,21 @@ public class CommandConsole implements ICommandConsole {
 		}
 	}
 
+	/**
+	 * Default standard output
+	 * @param args arguments to print
+	 */
 	public void stdout(Object... args) {
 		for (Object object : args) {
 			stdout.print(object);
 		}
 		stdout.println();
 	}
+
+	/**
+	 * Default standard error
+	 * @param args arguments to print
+	 */
 
 	public void stderr(Object... args) {
 		for (Object object : args) {

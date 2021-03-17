@@ -14,14 +14,38 @@ import org.threewaves.eris.util.YamlConfig;
  *
  */
 public class Config {
+	/**
+	 * Notepad path 
+	 */
 	public final String notepad;
+	/**
+	 * Merge tool
+	 */
 	public final String diffw;
+	/**
+	 * Factory class name implementation
+	 */
 	private final String factory;
+	/**
+	 * Test case directory path
+	 */
 	private final String testCaseDirectory;
+	/**
+	 * JS script engine
+	 */
 	public final String scriptEngine;
+	/**
+	 * Console font family
+	 */
 	public final String fontFamily;
+	/**
+	 * Console font size
+	 */
 	public final int fontSize;
 
+	/**
+	 * Constructor for default configuration
+	 */
 	public Config() {
 		notepad = "notepad2.exe";
 		diffw = "C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe";
@@ -55,8 +79,8 @@ public class Config {
 	}
 
 	/**
-	 * Creates a eris factory from configuration.
-	 * @return
+	 * Creates a Eris factory from configuration.
+	 * @return Factory instance
 	 */
 	public IErisFactory createFactory() {
 		return Reflection.newInstance(factory, IErisFactory.class);
