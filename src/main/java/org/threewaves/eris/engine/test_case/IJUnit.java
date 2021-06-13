@@ -10,7 +10,7 @@ public interface IJUnit {
 
 	void afterAll(Consumer<String> assertModule) throws IOException;
 
-	void beforeAll();
+	void beforeAll() throws ClassNotFoundException;
 
 	<T extends IBuilder> T getBuilder(String name, Class<T> clazz);
 

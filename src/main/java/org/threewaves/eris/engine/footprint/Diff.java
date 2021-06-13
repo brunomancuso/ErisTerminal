@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.threewaves.eris.util.ShellExec;
 
 /**
@@ -18,7 +19,7 @@ import org.threewaves.eris.util.ShellExec;
  *
  */
 public class Diff {
-	private final Path diff = Paths.get("bin", "diff.exe");
+	private final Path diff = SystemUtils.IS_OS_LINUX ? Paths.get("diff") : Paths.get("bin", "diff.exe");
 	private final static Path OUT = Paths.get("out");
 
 	public static boolean isDirection(String line) {

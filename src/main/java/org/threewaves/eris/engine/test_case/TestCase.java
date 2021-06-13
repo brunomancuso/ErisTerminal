@@ -1,6 +1,9 @@
 package org.threewaves.eris.engine.test_case;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 
 import org.threewaves.eris.util.Format;
@@ -28,6 +31,23 @@ public class TestCase {
 			}
 		}
 		return null;
+	}
+
+	private String getPackage() throws IOException {
+		if (isJS()) {
+			return "";
+		}
+		List<String> lines = Files.readAllLines(this.path);
+		for (String line : lines) {
+			line = line.trim();
+			if (line.startsWith("package")) {
+				line = line.substring(line.indexOf(' '), line.indexOf(';'));
+				return line.trim();
+			} else if (line.startsWith("import") || line.startsWith("public") || line.startsWith("class")) {
+				return "";
+			}
+		}
+		return "";
 	}
 
 	public int getNumber() {
@@ -73,8 +93,13 @@ public class TestCase {
 
 	public Optional<Class<?>> getTestCaseClass() {
 		try {
-			return Optional.of(Class.forName(getName()));
-		} catch (ClassNotFoundException e) {
+			String p = getPackage();
+			if (!p.isEmpty()) {
+				p = p + ".";
+			}
+			String name = p + getName();
+			return Optional.of(Class.forName(name));
+		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
 		return Optional.empty();

@@ -31,7 +31,7 @@ public class TestSuit {
 		return directory;
 	}
 
-	public Optional<TestCase> findByFileName(String fileName) {
+	public static Optional<TestCase> findByFileName(Path directory, String fileName) {
 		if (Files.exists(directory)) {
 			try (Stream<Path> s = Files.list(directory)) {
 				return s.filter((tc) -> {
@@ -42,6 +42,10 @@ public class TestSuit {
 			}
 		}
 		return Optional.empty();
+	}
+
+	public Optional<TestCase> findByFileName(String fileName) {
+		return TestSuit.findByFileName(directory, fileName);
 	}
 
 }

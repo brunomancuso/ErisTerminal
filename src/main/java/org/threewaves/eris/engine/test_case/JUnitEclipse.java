@@ -42,10 +42,10 @@ public class JUnitEclipse implements IJUnit {
 	}
 
 	@Override
-	public void beforeAll() {
+	public void beforeAll() throws ClassNotFoundException {
 		Exception e = new Exception();
 		e.fillInStackTrace();
-		StackTraceElement st = e.getStackTrace()[1];
+		StackTraceElement st = stackTrace();
 		Optional<TestCase> testCase = engine.getTestSuit().findByFileName(st.getFileName());
 		if (!testCase.isPresent()) {
 			throw new RuntimeException("Test case not found: " + st.getFileName());
@@ -53,6 +53,18 @@ public class JUnitEclipse implements IJUnit {
 		runner.beforeAll(testCase.get(), null);
 	}
 
+	private static StackTraceElement stackTrace() throws ClassNotFoundException {
+		Exception ex = new Exception();
+		ex.fillInStackTrace();
+		for (StackTraceElement e : ex.getStackTrace()) {
+			if (!e.getClassName().equals(ex.getStackTrace()[0].getClassName())) {
+				if (Class.forName(e.getClassName()).getSimpleName().startsWith(TestCase.PREFIX_NAME)) {
+					return e;
+				}
+			}
+		}
+		return null;
+	}
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends IBuilder> T getBuilder(String name, Class<T> clazz) {

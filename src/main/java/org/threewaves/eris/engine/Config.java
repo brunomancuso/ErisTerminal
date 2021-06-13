@@ -56,6 +56,16 @@ public class Config {
 		fontSize = 12;
 	}
 
+	public Config(String notepad, String diffw, String factory, String testCaseDirectory, String scriptEngine, String fontFamily, int fontSize) {
+		this.notepad = notepad;
+		this.diffw = diffw;
+		this.factory = factory;
+		this.testCaseDirectory = testCaseDirectory;
+		this.scriptEngine = scriptEngine;
+		this.fontFamily = fontFamily;
+		this.fontSize = fontSize;
+	}
+
 	/**
 	 * Creates or loads the configuration properties of the eris runtime engine.
 	 * @return the current configuration properties

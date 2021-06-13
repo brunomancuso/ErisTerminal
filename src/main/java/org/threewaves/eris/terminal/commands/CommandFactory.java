@@ -2,6 +2,7 @@ package org.threewaves.eris.terminal.commands;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,8 +43,14 @@ public class CommandFactory {
 
 		cmds.add(new UsageCmd(usage(cmds)));
 		eris.getFactory().createExternalCommands().forEach(c -> cmds.add(c));
-
-		return cmds.stream().collect(Collectors.toMap(ICommand::name, c -> c));
+		Map<String, ICommand> map = new HashMap<>();
+		cmds.stream().forEach(cmd -> {
+			if (map.containsKey(cmd.name())) {
+				map.remove(cmd.name());
+			}
+			map.put(cmd.name(), cmd);
+		});
+		return map;
 	}
 
 	private static String usage(List<ICommand> cmds) {

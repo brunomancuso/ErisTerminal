@@ -15,7 +15,7 @@ import org.threewaves.eris.engine.test_case.TestCase;
 import org.threewaves.eris.engine.test_case.TestCaseRunner;
 import org.threewaves.eris.util.Pad;
 
-class RunCmd implements ICommand {
+public class RunCmd implements ICommand {
 	public static final String NAME = "run";
 	private final TestCaseRunner runner;
 	private final Engine eris;
@@ -35,6 +35,14 @@ class RunCmd implements ICommand {
 		return NAME;
 	}
 
+	public List<TestCase> testCases(List<String> options) {
+		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(),
+				runner.getAvailableModules());
+		parser.process(options);
+		List<TestCase> testCases = parser.testCases();
+		return testCases;
+	}
+
 	@Override
 	public void exec(ICommandConsole console, List<String> options) {
 		boolean background = CommandFactory.isBackgroundOption(options);
@@ -51,6 +59,7 @@ class RunCmd implements ICommand {
 			}
 			runner.beforeRunner(modules);
 			JUnitRuntime.update(eris, runner);
+
 			testCases.forEach(tc -> {
 				try {
 					runner.exec(tc, !background ? null : (testCase, duration, failedModules) -> {
