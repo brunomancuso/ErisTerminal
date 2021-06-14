@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.threewaves.eris.engine.CommandConsole;
 import org.threewaves.eris.engine.Config;
 import org.threewaves.eris.engine.ConfigException;
@@ -166,15 +167,18 @@ public class Terminal {
 
 	public static boolean isAdmin() {
 		try {
-			ProcessBuilder builder = new ProcessBuilder("net", "session").redirectError(Redirect.PIPE)
-					.redirectOutput(Redirect.PIPE);
-			Process process = builder.start();
-			process.waitFor();
-			int i = process.exitValue();
-			return i == 0;
+			if (SystemUtils.IS_OS_WINDOWS) {
+				ProcessBuilder builder = new ProcessBuilder("net", "session").redirectError(Redirect.PIPE)
+						.redirectOutput(Redirect.PIPE);
+				Process process = builder.start();
+				process.waitFor();
+				int i = process.exitValue();
+				return i == 0;
+			}
 		} catch (IOException | InterruptedException e) {
 			return false;
 		}
+		return false;
 	}
 
 	static String workingDirectory() {
