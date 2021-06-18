@@ -29,6 +29,7 @@ import javax.swing.text.DefaultCaret;
 
 import org.threewaves.eris.engine.Config;
 import org.threewaves.eris.engine.ICommand;
+import org.threewaves.eris.engine.footprint.Module;
 import org.threewaves.eris.engine.footprint.Modules;
 
 class JConsole {
@@ -62,7 +63,7 @@ class JConsole {
 		}
 	}
 
-	private JTextPane component = new JTextPane() {
+	private final JTextPane component = new JTextPane() {
 		private static final long serialVersionUID = 1L;
 		
 		@Override
@@ -75,12 +76,12 @@ class JConsole {
 	private static final String PROMPT = "e> ";
 	private static final String NEWLINE = "\r\n";
 	private final List<IExecutionListener> listeners = new ArrayList<>();
-	private MergeAutoComplete autoComplete = new MergeAutoComplete();
+	private final MergeAutoComplete autoComplete = new MergeAutoComplete();
 
 	public JConsole(Config config, TerminalHistory history, Collection<ICommand> cmds, Modules modules) {
 		KeywordAutoComplete keywords = new KeywordAutoComplete();
-		keywords.add(cmds.stream().map(c -> c.name()).collect(Collectors.toList()));
-		keywords.add(modules.getList().stream().map(m -> m.getName()).collect(Collectors.toList()));
+		keywords.add(cmds.stream().map(ICommand::name).collect(Collectors.toList()));
+		keywords.add(modules.getList().stream().map(Module::getName).collect(Collectors.toList()));
 		autoComplete.add(keywords).add(new DirectoryAutoComplete());
 		Color back = new Color(25, 29, 31);
 		Color front = NORMAL_COLOR;
@@ -124,6 +125,8 @@ class JConsole {
 					replacePrompt("");
 					history.maxIndex();
 					currentCommand = null;
+				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
+				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_UP) {
 				} else if (e.getKeyCode() == KeyEvent.VK_HOME) {
 					homePrompt();
 					e.consume();
@@ -182,7 +185,7 @@ class JConsole {
 						List<String> options = new ArrayList<>();
 						String[] tmp = text.split("\\s+");
 						currentCommand = null;
-						if (tmp != null && tmp.length > 0) {
+						if (tmp.length > 0) {
 							history.addPrompt(text);
 							history.save();
 							for (int i = 1; i < tmp.length; i++) {
@@ -233,9 +236,13 @@ class JConsole {
 							help.append("\n");
 							count = 0;
 						}
-						System.out.print(help.toString());
+						System.out.print(help);
 						newPrompt();
 						System.out.print(input);
+					}
+				} else {
+					if (!isWritingPrompt()) {
+						e.consume();
 					}
 				}
 			}
@@ -297,6 +304,14 @@ class JConsole {
 		}
 	}
 
+	public boolean isWritingPrompt() {
+		try {
+			return (lineNumberPrompt() == getLineOfOffset(size() - 1));
+		} catch (BadLocationException e) {
+			//nothing
+		}
+		return false;
+	}
 	private int getLineEndOffset(int line) throws BadLocationException {
 		return SwingHelper.getLineEndOffset(component, line);
 	}
