@@ -26,6 +26,7 @@ import org.threewaves.eris.engine.ICommand;
 import org.threewaves.eris.terminal.GenericAppender.IAppender;
 import org.threewaves.eris.terminal.GenericAppender.Type;
 import org.threewaves.eris.terminal.commands.CommandFactory;
+import org.threewaves.eris.terminal.commands.CommandNotFoundCmd;
 
 public class Terminal {
 	private static final String CONSOLE_NAME = "Eris Terminal";
@@ -100,8 +101,12 @@ public class Terminal {
 		executionQueue.start();
 		console.addExecutionListener((c, o, onFinish) -> {
 			ICommand cmd = commands.get(c);
-			defaultConsole.stdout(c + " " + o);			
+			if (cmd == null) {
+				cmd = new CommandNotFoundCmd();
+			}
+			defaultConsole.stdout(c + " " + o);
 			executionQueue.execute(cmd, o, onFinish);
+
 		});
 		JScrollPane scroll = new JScrollPane( //
 				console.getComponent(), //
