@@ -15,11 +15,13 @@ import org.threewaves.eris.engine.test_case.TestCase;
 import org.threewaves.eris.engine.test_case.TestSuit;
 import org.threewaves.eris.util.Format;
 
-class TestCaseArgumentParser {
+public class TestCaseArgumentParser {
 	private final TestSuit suit;
 	private final Modules avaibleModules;
 	private final List<Module> modules = new ArrayList<>();
 	private final List<TestCase> testCases = new ArrayList<>();
+	private final List<TestCase> lastSaved = new ArrayList<>();
+	public boolean allIncluded;
 
 	public TestCaseArgumentParser(TestSuit suit, Modules modules) {
 		this.suit = suit;
@@ -35,8 +37,13 @@ class TestCaseArgumentParser {
 	}
 
 	public void process(List<String> options) {
+		process(options, false);
+	}
+
+	public void process(List<String> options, boolean includeAll) {
 		testCases.clear();
 		modules.clear();
+		allIncluded = false;
 		options.forEach(o -> {
 			List<TestCase> ls = parse(suit, o);
 			testCases.addAll(ls);
@@ -48,9 +55,17 @@ class TestCaseArgumentParser {
 		if (modules.size() == 0) {
 			modules.addAll(avaibleModules.getList());
 		}
-		if (testCases.size() == 0) {
+		if (testCases.size() == 0 && includeAll) {
 			testCases.addAll(suit.list());
+			allIncluded = true;
+		} else if (testCases.size() == 0) {
+			testCases.addAll(lastSaved);
 		}
+	}
+
+	public void save() {
+		lastSaved.clear();
+		lastSaved.addAll(testCases);
 	}
 
 	public static List<TestCase> parse(TestSuit suit, String f) {
@@ -97,4 +112,7 @@ class TestCaseArgumentParser {
 		return testCases.stream().filter(t -> t.getNumber() == testCase).findAny();
 	}
 
+	public boolean isAllIncluded() {
+		return allIncluded;
+	}
 }

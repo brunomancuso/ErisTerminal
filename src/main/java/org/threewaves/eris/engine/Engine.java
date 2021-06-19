@@ -7,6 +7,7 @@ import java.util.List;
 import org.threewaves.eris.engine.IBuilder.Scope;
 import org.threewaves.eris.engine.footprint.Modules;
 import org.threewaves.eris.engine.test_case.TestSuit;
+import org.threewaves.eris.terminal.commands.TestCaseArgumentParser;
 
 /**
  * Eris engine runtime, contains the modules that are configurated, the eris factory, 
@@ -129,5 +130,4 @@ public class Engine {
 	public Modules getModules() {
 		return modules;
 	}
-
 }

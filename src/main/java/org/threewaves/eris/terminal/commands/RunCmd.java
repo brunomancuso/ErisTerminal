@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import junit.framework.Test;
 import org.threewaves.eris.engine.ConfigException;
 import org.threewaves.eris.engine.Engine;
 import org.threewaves.eris.engine.FailedTestCaseException;
@@ -19,10 +20,12 @@ public class RunCmd implements ICommand {
 	public static final String NAME = "run";
 	private final TestCaseRunner runner;
 	private final Engine eris;
+	private final TestCaseArgumentParser parser;
 
-	public RunCmd(Engine eris, String scriptEngine) {
+	public RunCmd(Engine eris, String scriptEngine, TestCaseArgumentParser parser) {
 		this.eris = eris;
 		this.runner = new TestCaseRunner(eris, scriptEngine);
+		this.parser = parser;
 	}
 
 	@Override
@@ -36,11 +39,10 @@ public class RunCmd implements ICommand {
 	}
 
 	public List<TestCase> testCases(List<String> options) {
-		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(),
-				runner.getAvailableModules());
-		parser.process(options);
-		List<TestCase> testCases = parser.testCases();
-		return testCases;
+		//TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(),
+		//		runner.getAvailableModules());
+		parser.process(options, true);
+		return parser.testCases();
 	}
 
 	@Override
@@ -49,9 +51,10 @@ public class RunCmd implements ICommand {
 		boolean throwException = CommandFactory.isThrowExceptionOption(options);
 		try {
 			eris.getModules().refresh();
-			TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(),
-					runner.getAvailableModules());
-			parser.process(options);
+			parser.process(options, true);
+			if (!parser.isAllIncluded()) {
+				parser.save();
+			}
 			List<TestCase> testCases = parser.testCases();
 			List<Module> modules = parser.modules();
 			if (background) {

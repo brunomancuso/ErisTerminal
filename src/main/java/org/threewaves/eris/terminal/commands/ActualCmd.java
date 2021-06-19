@@ -14,9 +14,11 @@ import org.threewaves.eris.engine.test_case.TestRun;
 
 class ActualCmd implements ICommand {
 	private final Engine eris;
+	private final TestCaseArgumentParser parser;
 
-	public ActualCmd(Engine eris) {
+	public ActualCmd(Engine eris, TestCaseArgumentParser parser) {
 		this.eris = eris;
+		this.parser = parser;
 	}
 
 	@Override
@@ -36,7 +38,6 @@ class ActualCmd implements ICommand {
 
 	@Override
 	public void exec(ICommandConsole console, List<String> arguments) {
-		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(), eris.getModules());
 		parser.process(arguments);
 		List<TestCase> testCases = parser.testCases();
 		List<Module> modules = parser.modules();

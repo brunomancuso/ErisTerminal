@@ -240,6 +240,10 @@ class JConsole {
 						newPrompt();
 						System.out.print(input);
 					}
+				} else if (e.getKeyCode() == KeyEvent.VK_C && e.isControlDown()) {
+					System.out.println("CTRL+C");
+					publishExecution("CTRL+C", Collections.emptyList(), () -> newPrompt());
+					e.consume();
 				} else {
 					if (!isWritingPrompt()) {
 						e.consume();

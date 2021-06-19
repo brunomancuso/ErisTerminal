@@ -12,9 +12,11 @@ import org.threewaves.eris.engine.test_case.TestCaseInsertCode;
 
 class InsertCodeCmd implements ICommand {
 	private final Engine eris;
+	private final TestCaseArgumentParser parser;
 
-	public InsertCodeCmd(Engine eris) {
+	public InsertCodeCmd(Engine eris, TestCaseArgumentParser parser) {
 		this.eris = eris;
+		this.parser = parser;
 	}
 
 	@Override
@@ -29,7 +31,6 @@ class InsertCodeCmd implements ICommand {
 
 	@Override
 	public void exec(ICommandConsole console, List<String> options) {
-		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(), eris.getModules());
 		parser.process(options);
 		List<TestCase> testCases = parser.testCases();
 		List<Module> modules = parser.modules();

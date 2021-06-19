@@ -15,9 +15,11 @@ import org.threewaves.eris.engine.test_case.TestCase;
 
 class CopyCmd implements ICommand {
 	private final Engine eris;
+	private final TestCaseArgumentParser parser;
 
-	public CopyCmd(Engine eris) {
+	public CopyCmd(Engine eris, TestCaseArgumentParser parser) {
 		this.eris = eris;
+		this.parser = parser;
 	}
 
 	@Override
@@ -37,7 +39,6 @@ class CopyCmd implements ICommand {
 
 	@Override
 	public void exec(ICommandConsole console, List<String> arguments) {
-		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(), eris.getModules());
 		parser.process(arguments);
 		List<TestCase> testCases = parser.testCases();
 		if (testCases.size() != 1) {

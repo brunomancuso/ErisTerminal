@@ -14,9 +14,11 @@ import org.threewaves.eris.engine.test_case.TestRun;
 
 class DiffCmd implements ICommand {
 	private final Engine eris;
+	private final TestCaseArgumentParser parser;
 
-	public DiffCmd(Engine eris) {
+	public DiffCmd(Engine eris, TestCaseArgumentParser parser) {
 		this.eris = eris;
+		this.parser = parser;
 	}
 
 	@Override
@@ -31,7 +33,6 @@ class DiffCmd implements ICommand {
 
 	@Override
 	public void exec(ICommandConsole console, List<String> options) {
-		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(), eris.getModules());
 		parser.process(options);
 		List<TestCase> testCases = parser.testCases();
 		List<Module> modules = parser.modules();

@@ -39,10 +39,18 @@ public class ExecutionQueue {
 		while (!Thread.currentThread().isInterrupted()) {
 			try {
 				ExecutionElement element = queue.take();
-				element.command.exec(console, element.options);
-				element.onFinish.run();
+				try {
+					element.command.exec(console, element.options);
+					element.onFinish.run();
+				} catch (IllegalArgumentException e) {
+					System.err.println("Usage: " + e.getMessage());
+					element.onFinish.run();
+				} catch (RuntimeException e) {
+					e.printStackTrace();
+					element.onFinish.run();
+				}
 			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
+				System.out.println("[CTRL+C]");
 			}
 		}
 	}
@@ -50,5 +58,9 @@ public class ExecutionQueue {
 	public void execute(ICommand cmd, List<String> o, Runnable onFinish) {
 		queue.add(new ExecutionElement(cmd ,o, onFinish));
 	}
-	
+
+	public void abort() {
+		executor.shutdownNow();
+	}
+
 }

@@ -15,10 +15,12 @@ import org.threewaves.eris.util.ShellExec;
 class DiffWCmd implements ICommand {
 	private final Engine eris;
 	private final Config config;
+	private final TestCaseArgumentParser parser;
 
-	public DiffWCmd(Config config, Engine eris) {
+	public DiffWCmd(Config config, Engine eris, TestCaseArgumentParser parser) {
 		this.eris = eris;
 		this.config = config;
+		this.parser = parser;
 	}
 
 	@Override
@@ -33,7 +35,6 @@ class DiffWCmd implements ICommand {
 
 	@Override
 	public void exec(ICommandConsole console, List<String> options) {
-		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(), eris.getModules());
 		parser.process(options);
 		List<TestCase> testCases = parser.testCases();
 		if (testCases.size() > 1) {

@@ -16,9 +16,11 @@ import org.threewaves.eris.engine.test_case.TestCase;
 public class JUnitCmd implements ICommand {
 	public static final String NAME = "junit";
 	private final Engine eris;
+	private final TestCaseArgumentParser parser;
 
-	public JUnitCmd(Engine eris) {
+	public JUnitCmd(Engine eris, TestCaseArgumentParser parser) {
 		this.eris = eris;
+		this.parser = parser;
 	}
 
 	@Override
@@ -46,7 +48,6 @@ public class JUnitCmd implements ICommand {
 				console.error(e);
 			}
 		}
-		TestCaseArgumentParser parser = new TestCaseArgumentParser(eris.getTestSuit(), eris.getModules());
 		parser.process(arguments);
 		List<TestCase> testCases = parser.testCases();
 		testCases.forEach(tc -> {
