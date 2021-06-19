@@ -65,7 +65,7 @@ class ListCmd implements ICommand {
 		matches.sort(new Comparator<Pair<Integer, TestCase>>() {
 			@Override
 			public int compare(Pair<Integer, TestCase> o1, Pair<Integer, TestCase> o2) {
-				return -Integer.compare(o1.first, o2.first);
+				return Integer.compare(o2.first, o1.first);
 			}
 		});
 		return matches.stream().filter(p -> p.first >= filter.size()).map(p -> p.second).collect(Collectors.toList());
