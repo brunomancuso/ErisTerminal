@@ -50,4 +50,9 @@ public class JUnitNonEclipse implements IJUnit {
 		return engine;
 	}
 
+	@Override
+	public TestCaseRunner getRunner() {
+		return runner;
+	}
+
 }

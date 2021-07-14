@@ -16,4 +16,5 @@ public interface IJUnit {
 
 	Engine getEngine();
 
+	TestCaseRunner getRunner();
 }

@@ -26,6 +26,10 @@ public class TestReport {
 		public boolean isFailed() {
 			return failedModules.size() > 0;
 		}
+
+		public Map<String, List<NormalDiff>> diff() {
+			return Collections.unmodifiableMap(diff);
+		}
 	}
 
 	private final Map<String, Report> reportByTestCase = new HashMap<>();

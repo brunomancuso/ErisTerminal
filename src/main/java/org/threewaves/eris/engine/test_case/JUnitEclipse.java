@@ -86,4 +86,10 @@ public class JUnitEclipse implements IJUnit {
 	public Engine getEngine() {
 		return engine;
 	}
+
+
+	@Override
+	public TestCaseRunner getRunner() {
+		return runner;
+	}
 }
